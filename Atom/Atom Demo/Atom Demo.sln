@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atom Demo", "Atom Demo\Atom Demo\Atom Demo.csproj", "{4F55A90C-8797-4BAA-BF50-B4750C69D7C4}"
+EndProject
+Project("{96E2B04D-8817-42C6-938A-82C39BA4D311}") = "Atom DemoContent", "Atom Demo\Atom DemoContent\Atom DemoContent.contentproj", "{E9D6C841-4708-4940-9E1D-A1F432D18D9A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atom", "Atom\Atom.csproj", "{EEA0F649-DE6E-41B9-B792-B8B185CFF7D6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4F55A90C-8797-4BAA-BF50-B4750C69D7C4}.Debug|x86.ActiveCfg = Debug|x86
+		{4F55A90C-8797-4BAA-BF50-B4750C69D7C4}.Debug|x86.Build.0 = Debug|x86
+		{4F55A90C-8797-4BAA-BF50-B4750C69D7C4}.Release|x86.ActiveCfg = Release|x86
+		{4F55A90C-8797-4BAA-BF50-B4750C69D7C4}.Release|x86.Build.0 = Release|x86
+		{E9D6C841-4708-4940-9E1D-A1F432D18D9A}.Debug|x86.ActiveCfg = Debug|x86
+		{E9D6C841-4708-4940-9E1D-A1F432D18D9A}.Release|x86.ActiveCfg = Release|x86
+		{EEA0F649-DE6E-41B9-B792-B8B185CFF7D6}.Debug|x86.ActiveCfg = Debug|x86
+		{EEA0F649-DE6E-41B9-B792-B8B185CFF7D6}.Debug|x86.Build.0 = Debug|x86
+		{EEA0F649-DE6E-41B9-B792-B8B185CFF7D6}.Release|x86.ActiveCfg = Release|x86
+		{EEA0F649-DE6E-41B9-B792-B8B185CFF7D6}.Release|x86.Build.0 = Release|x86
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

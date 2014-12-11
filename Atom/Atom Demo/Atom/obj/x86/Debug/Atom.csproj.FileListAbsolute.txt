@@ -1,0 +1,5 @@
+H:\Microsoft Visual Studio Programming PROJECTS\Atom\Atom Demo\Atom\obj\x86\Debug\Microsoft.Xna.Framework.RuntimeProfile.txt
+H:\Microsoft Visual Studio Programming PROJECTS\Atom\Atom Demo\Atom\bin\x86\Debug\Atom.dll
+H:\Microsoft Visual Studio Programming PROJECTS\Atom\Atom Demo\Atom\bin\x86\Debug\Atom.pdb
+H:\Microsoft Visual Studio Programming PROJECTS\Atom\Atom Demo\Atom\obj\x86\Debug\Atom.dll
+H:\Microsoft Visual Studio Programming PROJECTS\Atom\Atom Demo\Atom\obj\x86\Debug\Atom.pdb
