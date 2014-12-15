@@ -41,7 +41,7 @@ namespace Atom_Demo
         {
             // TODO: Add your initialization logic here
             sprite = new GameObject();
-            renderer = new AnimatedRenderer(sprite, Content, "Koala", 1, 0);
+            renderer = new AnimatedRenderer(sprite, Content, "runningcat", 8, 1);
             sprite.render = renderer;
 
           
@@ -91,8 +91,8 @@ namespace Atom_Demo
 
             // TODO: Add your update logic here
             sprite.position = new Vector2(x, y);
-            x++;
-            sprite.rotation += 0.1f;
+          //  x++;
+           // sprite.rotation += 0.1f;
             sprite.Update(gameTime);
 
 

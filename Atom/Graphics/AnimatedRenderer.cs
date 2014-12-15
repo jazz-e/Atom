@@ -31,7 +31,7 @@ namespace Atom.Graphics
         {
             if (Paused)
                 return;
-            TotalElapsed +=(float) gameTime.ElapsedGameTime.TotalMilliseconds;
+            TotalElapsed +=(float) gameTime.ElapsedGameTime.TotalSeconds;
             if (TotalElapsed > TimePerFrame)
             {
                 Frame++;
@@ -51,7 +51,7 @@ namespace Atom.Graphics
         {
             int FrameWidth = _image.Width / framecount;
             Rectangle sourcerect = new Rectangle(FrameWidth * frame, 0,
-                FrameWidth, _image.Height);
+                FrameWidth, _image.Height / 4);
             batch.Draw(_image, _gameObject.position, sourcerect, Color.White,
                _gameObject.rotation, _gameObject.origin, _gameObject.scale, 
                SpriteEffects.None, _gameObject.layerDepth);
