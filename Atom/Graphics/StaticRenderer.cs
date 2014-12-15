@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.Content;
 
 namespace Atom.Graphics
 {
-    public class Renderer : IRender
+    public class StaticRenderer : IRender
     {
         protected Texture2D _image;
         public int width
@@ -24,7 +24,7 @@ namespace Atom.Graphics
         
         protected GameObject _gameObject;
 
-        public Renderer(GameObject gameObject, ContentManager content, string assetName)
+        public StaticRenderer(GameObject gameObject, ContentManager content, string assetName)
         {
             _image = content.Load<Texture2D>(assetName);
 

@@ -41,18 +41,18 @@ namespace Atom_Demo
         {
             // TODO: Add your initialization logic here
             sprite = new GameObject();
-            renderer = new AnimatedRenderer(sprite, Content, "runningcat", 8, 1);
+            renderer = new AnimatedRenderer(sprite, Content, "RunningMAN", 4, 2, 8);
             sprite.render = renderer;
 
           
             renderer.width = 100; renderer.height = 100;
             
-            sprite.scale = 0.25f;
+            sprite.scale = 0.5f;
 
             //sprite.origin =
             //  new Vector2(0,0);
 
-            x = 200; y = 200;
+            x = 300; y = 300;
             
             base.Initialize();
         }
@@ -94,7 +94,6 @@ namespace Atom_Demo
           //  x++;
            // sprite.rotation += 0.1f;
             sprite.Update(gameTime);
-
 
             base.Update(gameTime);
         }

@@ -95,7 +95,7 @@
     <Compile Include="Graphics\AnimatedRenderer.cs" />
     <Compile Include="Graphics\GameObject.cs" />
     <Compile Include="Graphics\IRender.cs" />
-    <Compile Include="Graphics\Renderer.cs" />
+    <Compile Include="Graphics\StaticRenderer.cs" />
     <Compile Include="IEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

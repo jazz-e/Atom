@@ -8,9 +8,10 @@ using Microsoft.Xna.Framework;
 
 namespace Atom.Graphics
 {
-    public class AnimatedRenderer : Renderer
+    public class AnimatedRenderer : StaticRenderer
     {
-        protected int framecount;
+        protected int framecountWidth;
+        protected int framecountHeight;
         protected float TimePerFrame;
         protected int Frame;
         protected float TotalElapsed;
@@ -18,10 +19,11 @@ namespace Atom.Graphics
 
         public AnimatedRenderer(GameObject gameObject,
             ContentManager content, string assetName,
-            int frameCount, int framesPerSec)
+            int frameCountWidth, int frameCountHeight, int framesPerSec)
             : base(gameObject,content,assetName)
         {
-            framecount = frameCount;
+            framecountWidth = frameCountWidth;
+            framecountHeight = frameCountHeight;
             TimePerFrame = (float)1 / framesPerSec;
             Frame = 0;
             TotalElapsed = 0;
@@ -36,7 +38,7 @@ namespace Atom.Graphics
             {
                 Frame++;
                 // Keep the Frame between 0 and the total frames, minus one.
-                Frame = Frame % framecount;
+                Frame = Frame % (framecountWidth * framecountHeight);
                 TotalElapsed -= TimePerFrame;
             }
 
@@ -49,14 +51,19 @@ namespace Atom.Graphics
         }
         private void DrawFrame(SpriteBatch batch, int frame, Vector2 screenPos)
         {
-            int FrameWidth = _image.Width / framecount;
-            Rectangle sourcerect = new Rectangle(FrameWidth * frame, 0,
-                FrameWidth, _image.Height / 4);
+            int FrameWidth = _image.Width / framecountWidth;
+            int sheetx = frame % framecountWidth * FrameWidth;
+
+            int FrameHeight = _image.Height / framecountHeight;
+            int sheety = (frame / framecountWidth) * FrameHeight;
+         
+            Rectangle sourcerect = new Rectangle(sheetx,sheety,
+                FrameWidth, FrameHeight);
+
             batch.Draw(_image, _gameObject.position, sourcerect, Color.White,
                _gameObject.rotation, _gameObject.origin, _gameObject.scale, 
                SpriteEffects.None, _gameObject.layerDepth);
         }
-
         public bool IsPaused
         {
             get { return Paused; }
