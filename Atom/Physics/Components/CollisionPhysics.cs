@@ -1,16 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Atom.World;
 using Microsoft.Xna.Framework;
-using Atom.Graphics;
 
 namespace Atom.Physics.Components
 {
     public class CollisionPhysics
     {
+        protected World.World World;
 
-        public void Update(GameTime gameTime, GameObject gameObject, Vector2 velocity)
+        public CollisionPhysics(World.World world)
+        {
+            World = world;
+        }
+
+
+        public virtual void Update(GameTime gameTime, GameObject gameObject, Vector2 velocity)
         {
             
 

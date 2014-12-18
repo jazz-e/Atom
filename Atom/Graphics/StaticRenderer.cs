@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Atom.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
@@ -10,32 +11,32 @@ namespace Atom.Graphics
 {
     public class StaticRenderer : IRender
     {
-        protected Texture2D _image;
-        public int width
+        protected Texture2D Image;
+        public int Width
         {
             get;
             set;
         }
-        public int height
+        public int Height
         {
             get;
             set;
         }
         
-        protected GameObject _gameObject;
+        protected GameObject GameObject;
 
         public StaticRenderer(GameObject gameObject, ContentManager content, string assetName)
         {
-            _image = content.Load<Texture2D>(assetName);
+            Image = content.Load<Texture2D>(assetName);
 
-            if (_image != null)
+            if (Image != null)
             {
-                this.width = _image.Width;
-                this.height = _image.Height;
+                this.Width = Image.Width;
+                this.Height = Image.Height;
             }
 
-            _gameObject = gameObject;
-            _gameObject.origin = new Vector2(this.width / 2, this.height / 2);
+            GameObject = gameObject;
+            GameObject.Origin = new Vector2(this.Width / 2, this.Height / 2);
         }
 
         public virtual void Update(GameTime gameTime)
@@ -44,26 +45,26 @@ namespace Atom.Graphics
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            if(_gameObject.origin == new Vector2(0,0) &&
-                _gameObject.rotation == 0)
+            if(GameObject.Origin == new Vector2(0,0) &&
+                GameObject.Rotation == 0)
             {
-            spriteBatch.Draw(_image,
-                new Rectangle((int)_gameObject.position.X,
-                    (int)_gameObject.position.Y,
-                    width, height),
+            spriteBatch.Draw(Image,
+                new Rectangle((int)GameObject.Position.X,
+                    (int)GameObject.Position.Y,
+                    Width, Height),
                 Color.White);
             }
             else 
             {
-            spriteBatch.Draw(_image,
-                _gameObject.position,
+            spriteBatch.Draw(Image,
+                GameObject.Position,
                 null,
                 Color.White,
-                _gameObject.rotation,
-                _gameObject.origin,
-                _gameObject.scale,
+                GameObject.Rotation,
+                GameObject.Origin,
+                GameObject.Scale,
                 SpriteEffects.None,
-                _gameObject.layerDepth);
+                GameObject.LayerDepth);
              }
         }
     }

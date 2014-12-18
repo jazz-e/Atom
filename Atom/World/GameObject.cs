@@ -1,19 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
-using Microsoft.Xna.Framework.Content;
+using Atom.Graphics;
 using Atom.Input;
 using Atom.Physics;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
-namespace Atom.Graphics
+namespace Atom.World
 {
     public class GameObject 
     {
-        #region Properties
+        #region Fields
 
         public Vector2 Position;
 
@@ -31,6 +27,11 @@ namespace Atom.Graphics
         #endregion
 
         #endregion
+
+        public GameObject(Vector2 position)
+        {
+            Position = position;
+        }
 
         public virtual void Update(GameTime gameTime)
         {

@@ -94,7 +94,11 @@
   <ItemGroup>
     <Compile Include="Atom.cs" />
     <Compile Include="Graphics\AnimatedRenderer.cs" />
-    <Compile Include="Graphics\GameObject.cs" />
+    <Compile Include="Physics\Components\Collision\BoundingBoxCollision.cs" />
+    <Compile Include="Physics\Components\Collision\IBoundingBoxCollidable.cs" />
+    <Compile Include="Physics\Components\Collision\IPerPixelCollidable.cs" />
+    <Compile Include="Physics\Components\Collision\PerPixelCollision.cs" />
+    <Compile Include="World\GameObject.cs" />
     <Compile Include="Graphics\IRender.cs" />
     <Compile Include="Graphics\StaticRenderer.cs" />
     <Compile Include="Input\InputComponent.cs" />

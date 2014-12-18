@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Atom.World;
 using Microsoft.Xna.Framework.Content;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
@@ -47,22 +48,22 @@ namespace Atom.Graphics
         public override void Draw(SpriteBatch spriteBatch)
         {
 
-            DrawFrame(spriteBatch, Frame, _gameObject.position);
+            DrawFrame(spriteBatch, Frame, GameObject.position);
         }
         private void DrawFrame(SpriteBatch batch, int frame, Vector2 screenPos)
         {
-            int FrameWidth = _image.Width / framecountWidth;
+            int FrameWidth = Image.Width / framecountWidth;
             int sheetx = frame % framecountWidth * FrameWidth;
 
-            int FrameHeight = _image.Height / framecountHeight;
+            int FrameHeight = Image.Height / framecountHeight;
             int sheety = (frame / framecountWidth) * FrameHeight;
          
             Rectangle sourcerect = new Rectangle(sheetx,sheety,
                 FrameWidth, FrameHeight);
 
-            batch.Draw(_image, _gameObject.position, sourcerect, Color.White,
-               _gameObject.rotation, _gameObject.origin, _gameObject.scale, 
-               SpriteEffects.None, _gameObject.layerDepth);
+            batch.Draw(Image, GameObject.position, sourcerect, Color.White,
+               GameObject.rotation, GameObject.origin, GameObject.scale, 
+               SpriteEffects.None, GameObject.layerDepth);
         }
         public bool IsPaused
         {
