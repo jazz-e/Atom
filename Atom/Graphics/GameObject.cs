@@ -11,7 +11,7 @@ using Atom.Physics;
 
 namespace Atom.Graphics
 {
-    public class GameObject : IEntity
+    public class GameObject 
     {
         #region Properties
 

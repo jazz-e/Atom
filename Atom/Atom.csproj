@@ -97,10 +97,15 @@
     <Compile Include="Graphics\GameObject.cs" />
     <Compile Include="Graphics\IRender.cs" />
     <Compile Include="Graphics\StaticRenderer.cs" />
-    <Compile Include="IEntity.cs" />
-    <Compile Include="Input\IInput.cs" />
-    <Compile Include="Input\KeyboardInput.cs" />
+    <Compile Include="Input\InputComponent.cs" />
+    <Compile Include="Input\KeyboardPlayerInput.cs" />
+    <Compile Include="Physics\Components\CollisionPhysics.cs" />
+    <Compile Include="Physics\Components\GravityPhysics.cs" />
+    <Compile Include="Physics\Components\MovementPhysics.cs" />
+    <Compile Include="Physics\EntityPhysics.cs" />
+    <Compile Include="Physics\PhysicsComponent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="World\World.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
