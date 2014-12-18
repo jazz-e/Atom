@@ -9,6 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Atom.Graphics;
+using Atom.Input;
 
 namespace Atom_Demo
 {
@@ -21,8 +22,7 @@ namespace Atom_Demo
         SpriteBatch spriteBatch;
 
         GameObject sprite;
-        AnimatedRenderer renderer;
-        int x, y;
+
 
 
         public Game1()
@@ -40,20 +40,8 @@ namespace Atom_Demo
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-            sprite = new GameObject();
-            renderer = new AnimatedRenderer(sprite, Content, "RunningMAN", 4, 2, 8);
-            sprite.render = renderer;
 
-          
-            renderer.width = 100; renderer.height = 100;
-            
-            sprite.scale = 0.5f;
 
-            //sprite.origin =
-            //  new Vector2(0,0);
-
-            x = 300; y = 300;
-            
             base.Initialize();
         }
 
@@ -90,9 +78,7 @@ namespace Atom_Demo
                 this.Exit();
 
             // TODO: Add your update logic here
-            sprite.position = new Vector2(x, y);
-          //  x++;
-           // sprite.rotation += 0.1f;
+
             sprite.Update(gameTime);
 
             base.Update(gameTime);

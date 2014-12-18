@@ -6,43 +6,48 @@ using System.Text;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Content;
+using Atom.Input;
+using Atom.Physics;
 
 namespace Atom.Graphics
 {
     public class GameObject : IEntity
     {
-        // -------------- Properties and Attributes ----------
-        public Vector2 position
-        {
-            get;
-            set;
-        }
-        public int velocity;
-        public Single rotation;
-        public Vector2 origin;
-        public Single scale;
-        public Single layerDepth;
+        #region Properties
 
-        // ------------------ Object Components --------------
-        public IRender render
-        {
-            get;
-            set;
-        }
+        public Vector2 Position;
 
+        public Single Rotation;
+        public Vector2 Origin;
+        public Single Scale;
+        public Single LayerDepth;
 
-        //----------------------- Methods ----------------
+        #region Components
+
+        public InputComponent Controller;
+        public IRender Renderer;
+        public PhysicsComponent Physics;
+
+        #endregion
+
+        #endregion
 
         public virtual void Update(GameTime gameTime)
         {
-            if (render != null)
-                render.Update(gameTime);
+            if (Renderer != null)
+                Renderer.Update(gameTime);
+
+            if (Controller != null)
+                Controller.Update(gameTime);
+
+            if (Physics != null)
+                Physics.Update(gameTime);
         }
 
         public virtual void Draw(SpriteBatch spritebatch)
         {
-            if(render != null)
-                render.Draw(spritebatch);
+            if(Renderer != null)
+                Renderer.Draw(spritebatch);
         }
     }
 }

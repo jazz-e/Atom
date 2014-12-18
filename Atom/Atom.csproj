@@ -92,11 +92,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Atom.cs" />
     <Compile Include="Graphics\AnimatedRenderer.cs" />
     <Compile Include="Graphics\GameObject.cs" />
     <Compile Include="Graphics\IRender.cs" />
     <Compile Include="Graphics\StaticRenderer.cs" />
     <Compile Include="IEntity.cs" />
+    <Compile Include="Input\IInput.cs" />
+    <Compile Include="Input\KeyboardInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
