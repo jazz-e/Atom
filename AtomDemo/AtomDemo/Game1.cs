@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Atom.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -9,10 +8,8 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using Atom.Graphics;
-using Atom.Input;
 
-namespace Atom_Demo
+namespace AtomDemo
 {
     /// <summary>
     /// This is the main type for your game
@@ -21,10 +18,6 @@ namespace Atom_Demo
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-
-        GameObject sprite;
-
-
 
         public Game1()
         {
@@ -41,7 +34,6 @@ namespace Atom_Demo
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
 
             base.Initialize();
         }
@@ -80,8 +72,6 @@ namespace Atom_Demo
 
             // TODO: Add your update logic here
 
-            sprite.Update(gameTime);
-
             base.Update(gameTime);
         }
 
@@ -94,11 +84,6 @@ namespace Atom_Demo
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
-
-            sprite.Draw(spriteBatch);
-
-            spriteBatch.End();
 
             base.Draw(gameTime);
         }

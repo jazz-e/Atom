@@ -1,6 +1,6 @@
 using System;
 
-namespace Atom_Demo
+namespace AtomDemo
 {
 #if WINDOWS || XBOX
     static class Program
