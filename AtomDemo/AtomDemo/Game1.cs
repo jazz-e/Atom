@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Atom.Entity;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Content;
@@ -34,6 +35,16 @@ namespace AtomDemo
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
+
+            EntityFactory entityFactory = EntityFactory.GetInstance();
+
+            entityFactory.RegisterEntity(typeof (PlayerEntity));
+
+            PlayerEntity entity = entityFactory.CreateEntity<PlayerEntity>();
+            PlayerEntity entity1 = entityFactory.CreateEntity<PlayerEntity>();
+
+            Console.WriteLine(entity.CreateCommonComponents());
+            Console.WriteLine(entity1.CreateCommonComponents());
 
             base.Initialize();
         }

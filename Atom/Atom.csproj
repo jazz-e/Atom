@@ -62,7 +62,6 @@
   <ItemGroup>
     <Compile Include="Entity\Entity.cs" />
     <Compile Include="Entity\EntityFactory.cs" />
-    <Compile Include="Entity\EntityManager.cs" />
     <Compile Include="Entity\NotEntityException.cs" />
     <Compile Include="Graphics\AnimatedSpriteComponent.cs" />
     <Compile Include="Component.cs" />
