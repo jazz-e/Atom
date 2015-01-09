@@ -2,7 +2,7 @@
 
 namespace Atom.Input
 {
-    public class FirstPersonKeyComponent
+    public class FirstPersonKeyComponent : Component
     {
         /// <summary>
         /// The avaiable actions that can be triggered
