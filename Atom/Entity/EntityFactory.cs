@@ -20,7 +20,7 @@ namespace Atom.Entity
         /// <param name="type"></param>
         public void RegisterEntity(Type type)
         {
-            if (!type.IsAssignableFrom(typeof (Entity)))
+            if (!type.IsSubclassOf(typeof (Entity)))
             {
                 throw new NotEntityException();
             }
