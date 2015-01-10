@@ -1,6 +1,6 @@
 ﻿namespace Atom.Graphics
 {
-    public class AnimatedSpriteComponent : Component 
+    public class AnimatedSpriteComponent : SpriteComponent 
     {
         /// <summary>
         /// How many frames will be played per second
