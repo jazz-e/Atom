@@ -10,7 +10,7 @@ namespace AtomDemo
 {
     public class PlayerEntity : Entity
     {
-        public override List<Component> CreateCommonComponents()
+        public override List<Component> CreateDefaultComponents()
         {
             List<Component> components = new List<Component>
             {

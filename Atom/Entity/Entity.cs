@@ -13,7 +13,7 @@ namespace Atom.Entity
         /// Creates all the components needed for the entity and returns them in a list
         /// </summary>
         /// <returns>List of all the components that the entity uses</returns>
-        public virtual List<Component> CreateCommonComponents()
+        public virtual List<Component> CreateDefaultComponents()
         {
             return new List<Component>();
         }
