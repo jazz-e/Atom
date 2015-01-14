@@ -2,7 +2,7 @@
 
 namespace Atom.Entity
 {
-    public abstract class Entity
+    public abstract class BaseEntity
     {
         /// <summary>
         /// Unique identifier given to each entity
