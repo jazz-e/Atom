@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Atom.Entity
+namespace Atom.Exceptions
 {
     public class NotEntityException : Exception
     {
