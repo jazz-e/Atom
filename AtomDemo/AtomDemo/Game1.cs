@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Atom;
 using Atom.Entity;
+using Atom.Logging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -34,13 +35,18 @@ namespace AtomDemo
 
             EntityFactory entityFactory = EntityFactory.GetInstance();
 
-            EntityFactory.GetInstance().RegisterEntity<PlayerEntity>();
+            EntityFactory.GetInstance().Register<PlayerEntity>();
 
-            PlayerEntity entity = entityFactory.CreateEntity<PlayerEntity>();
-            PlayerEntity entity1 = entityFactory.CreateEntity<PlayerEntity>();
+            PlayerEntity entity = entityFactory.Construct<PlayerEntity>();
+            PlayerEntity entity1 = entityFactory.Construct<PlayerEntity>();
 
             List<Component> components = entity.CreateDefaultComponents();
-            Console.WriteLine(entity1.CreateDefaultComponents());
+
+            ILogger logger = LogFactory.GetInstance().Construct("Console");
+
+            logger.Log(LogLevel.Info, components.ToString());
+            logger.Log(LogLevel.Warning, "Warning Message");
+            logger.Log(LogLevel.Error, "Error message");
 
             base.Initialize();
         }
