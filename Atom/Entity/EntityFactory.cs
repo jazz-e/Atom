@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Atom.Exceptions;
 
 namespace Atom.Entity
 {
@@ -19,16 +20,16 @@ namespace Atom.Entity
         /// </summary>
         /// <param name="id">The id that you want to set the entity to</param>
         /// <param name="type">The type of entity</param>
-        public void RegisterEntity(string id, Type type)
+        public void Register(string id, Type type)
         {
-            if (!type.IsSubclassOf(typeof (Entity)))
+            if (!type.IsSubclassOf(typeof(BaseEntity)))
             {
                 throw new NotEntityException();
             }
 
             if (_entityTypes.ContainsKey(id))
             {
-                return;
+                throw new IdAlreadyExists();
             }
 
             _entityTypes.Add(id, type);
@@ -38,9 +39,9 @@ namespace Atom.Entity
         /// Registers an entity type that can be used to create an instance of that entity. It will create an id from the FullName of the type.
         /// </summary>
         /// <param name="type"></param>
-        public void RegisterEntity(Type type)
+        public void Register(Type type)
         {
-            RegisterEntity(type.FullName, type);
+            Register(type.FullName, type);
         }
 
         /// <summary>
@@ -48,18 +49,18 @@ namespace Atom.Entity
         /// </summary>
         /// <typeparam name="T">The type of entity you want to register</typeparam>
         /// <param name="id">The id to give the entity type you are registering</param>
-        public void RegisterEntity<T>(string id)
+        public void Register<T>(string id)
         {
-            RegisterEntity(id, typeof (T));
+            Register(id, typeof(T));
         }
 
         /// <summary>
         /// Registers an entity type that can be used to create an instance of that entity. It will create an id from the FullName of the type.
         /// </summary>
         /// <typeparam name="T">The type of entity you want to register. Will use type FullName as the id.</typeparam>
-        public void RegisterEntity<T>()
+        public void Register<T>()
         {
-            RegisterEntity<T>(typeof (T).FullName);
+            Register<T>(typeof(T).FullName);
         }
 
         /// <summary>
@@ -67,11 +68,11 @@ namespace Atom.Entity
         /// </summary>
         /// <param name="id">The id of the entity</param>
         /// <returns>Returns a new instance of the Entity</returns>
-        public Entity CreateEntity(string id)
+        public BaseEntity Construct(string id)
         {
             Type entityType = _entityTypes[id];
 
-            var entity = Activator.CreateInstance(entityType) as Entity;
+            var entity = Activator.CreateInstance(entityType) as BaseEntity;
 
             if (entity == null)
             {
@@ -88,9 +89,9 @@ namespace Atom.Entity
         /// </summary>
         /// <param name="type">The type of entity you want. Will use FullName as id.</param>
         /// <returns>Returns a new instance of the Entity or null if it fails to do so</returns>
-        public Entity CreateEntity(Type type)
+        public BaseEntity Construct(Type type)
         {
-            return CreateEntity(type.FullName);
+            return Construct(type.FullName);
         }
 
         /// <summary>
@@ -99,9 +100,9 @@ namespace Atom.Entity
         /// <typeparam name="T">The type you want the Entity to be returned as</typeparam>
         /// <param name="id">The id of the entity</param>
         /// <returns>Returns a new instance of the Entity or null if it fails to do so</returns>
-        public T CreateEntity<T>(string id) where T : Entity
+        public T Construct<T>(string id) where T : BaseEntity
         {
-            var entity = CreateEntity(id);
+            var entity = Construct(id);
 
             return (T) entity;
         }
@@ -111,9 +112,9 @@ namespace Atom.Entity
         /// </summary>
         /// <typeparam name="T">The type you want the Entity to be returned as</typeparam>
         /// <returns>Returns a new instance of the Entity or null if it fails to do so</returns>
-        public T CreateEntity<T>() where T : Entity
+        public T Construct<T>() where T : BaseEntity
         {
-            return CreateEntity<T>(typeof (T).FullName);
+            return Construct<T>(typeof(T).FullName);
         }
 
         /// <summary>
