@@ -57,7 +57,7 @@ namespace Atom.World
             _systems.RemoveAll(system => system.GetType() == typeof (T));
         }
 
-        public BaseEntity AddEntity(BaseEntity entity)
+        public BaseEntity AddEntity(BaseEntity entity, List<Component> components)
         {
             if (entity == null)
                 throw new ArgumentNullException();
@@ -67,12 +67,27 @@ namespace Atom.World
 
             _entities.Add(entity);
 
+            foreach (System system in _systems)
+            {
+                foreach (Component component in components)
+                {
+                    system.AddComponent(component);
+                }
+            }
             return entity;
         }
 
-        public int RemoveEntity(int id)
+        public void RemoveEntity(int id)
         {
-            return _entities.RemoveWhere(entity => entity.Id == id);
+            IEnumerable<BaseEntity> removeEntities = _entities.Where(entity => entity.Id == id);
+
+            foreach (BaseEntity entity in removeEntities)
+            {
+                foreach (System system in _systems)
+                {
+                    system.RemoveEntityComponents(id);
+                }
+            }
         }
 
         public BaseEntity GetEntity(int id)
