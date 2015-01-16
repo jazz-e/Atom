@@ -50,7 +50,9 @@ namespace AtomDemo
             logger.Log(LogLevel.Error, "Error message");
 
             TestSystem system = new TestSystem();
+            TestSystem system2 = new TestSystem();
 
+            system.SendMessage();
             
 
             base.Initialize();
