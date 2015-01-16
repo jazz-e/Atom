@@ -16,6 +16,10 @@ namespace Atom.Messaging
             
         }
 
+        /// <summary>
+        /// Subscribes the receiver to the PostOffice.
+        /// </summary>
+        /// <param name="receiver">The receiver to subscribe</param>
         public static void Subscribe(IReceiver receiver)
         {
             receiver.Id = GetInstance().GetNextId();
@@ -28,6 +32,11 @@ namespace Atom.Messaging
             return _instance;
         }
 
+        /// <summary>
+        /// Sends a message to all the receivers that are subscribed to the message type.
+        /// </summary>
+        /// <param name="message">The message you want to send</param>
+        /// <returns>Returns TRUE or FALSE to whether the message has been sent to at least 1 receiver</returns>
         public static bool SendMessage(IMessage message)
         {
             bool hasSent = false;
