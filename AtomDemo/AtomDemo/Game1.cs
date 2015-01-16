@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Atom;
 using Atom.Entity;
 using Atom.Logging;
+using Atom.Messaging;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -47,6 +48,10 @@ namespace AtomDemo
             logger.Log(LogLevel.Info, components.ToString());
             logger.Log(LogLevel.Warning, "Warning Message");
             logger.Log(LogLevel.Error, "Error message");
+
+            TestSystem system = new TestSystem();
+
+            
 
             base.Initialize();
         }

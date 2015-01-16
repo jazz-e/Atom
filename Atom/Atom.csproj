@@ -72,6 +72,8 @@
     <Compile Include="Logging\LogFactory.cs" />
     <Compile Include="Logging\Loggers\ConsoleLogger.cs" />
     <Compile Include="Logging\LogLevel.cs" />
+    <Compile Include="Messaging\Inbox.cs" />
+    <Compile Include="Messaging\PostOffice.cs" />
     <Compile Include="Physics\PositionComponent.cs" />
     <Compile Include="Graphics\SpriteComponent.cs" />
     <Compile Include="Physics\VelocityComponent.cs" />
