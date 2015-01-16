@@ -20,6 +20,8 @@ namespace Atom.Entity
         /// </summary>
         /// <param name="id">The id that you want to set the entity to</param>
         /// <param name="type">The type of entity</param>
+        /// <exception cref="Atom.Exceptions.NotEntityException"></exception>
+        /// <exception cref="Atom.Exceptions.IdAlreadyExists"></exception>
         public void Register(string id, Type type)
         {
             if (!type.IsSubclassOf(typeof(BaseEntity)))
