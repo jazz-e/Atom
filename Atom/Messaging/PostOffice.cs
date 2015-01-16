@@ -43,7 +43,7 @@ namespace Atom.Messaging
 
             foreach (IReceiver receiver in GetInstance()._receivers)
             {
-                if (receiver.GetTypeFilter().Contains(message.GetType()))
+                if (receiver.GetMessageTypeFilter().Contains(message.GetType()))
                 {
                     receiver.OnMessage(message);
                     hasSent = true;

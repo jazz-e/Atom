@@ -19,6 +19,6 @@ namespace Atom.Messaging
         /// Gets the TypeFilter for the receiver
         /// </summary>
         /// <returns>Returns the TypeFilter for the receiver</returns>
-        TypeFilter GetTypeFilter();
+        TypeFilter GetMessageTypeFilter();
     }
 }
