@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Atom;
 using Atom.Entity;
+using Atom.Input;
 using Atom.Logging;
 using Atom.Logging.Loggers;
 using Atom.Messaging;
@@ -23,6 +24,7 @@ namespace AtomDemo
         SpriteBatch spriteBatch;
         MovementSystem movementSystem = new MovementSystem();
         PlayerEntity entity;
+        private World world;
 
         public Game1()
         {
@@ -40,6 +42,8 @@ namespace AtomDemo
         {
             // TODO: Add your initialization logic here
 
+            world = new World();
+
             EntityFactory entityFactory = EntityFactory.GetInstance();
 
             EntityFactory.GetInstance().Register<PlayerEntity>();
@@ -56,14 +60,12 @@ namespace AtomDemo
             logger.Log(LogLevel.Warning, "Warning Message");
             logger.Log(LogLevel.Error, "Error message");
 
-            TestSystem system = new TestSystem();
-            TestSystem system2 = new TestSystem();
+            StandardKeyboardSystem standardKeyboardSystem = new StandardKeyboardSystem();
 
-            movementSystem.AddEntityComponents(entity.Id, components);
+            world.AddSystem(movementSystem);
+            world.AddSystem(standardKeyboardSystem);
 
-            PostOffice.SendMessage(new MoveMessage(entity.Id, MoveDirection.Up));
-
-            system.SendMessage();
+            world.AddEntity(entity, components);
             
 
             base.Initialize();
@@ -101,9 +103,7 @@ namespace AtomDemo
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
-            // TODO: Add your update logic here
-
-            movementSystem.Update(gameTime, entity.Id);
+            world.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -116,7 +116,11 @@ namespace AtomDemo
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            // TODO: Add your drawing code here
+            spriteBatch.Begin();
+
+            world.Draw(spriteBatch);
+
+            spriteBatch.End();
 
             base.Draw(gameTime);
         }

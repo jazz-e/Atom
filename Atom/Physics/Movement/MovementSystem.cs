@@ -23,13 +23,18 @@ namespace Atom.Physics.Movement
         public override void Update(GameTime gameTime, int entityId)
         {
             VelocityComponent velocityComponent =
-                    GetComponentByEntityId<VelocityComponent>(entityId);
+                    GetComponentsByEntityId<VelocityComponent>(entityId).FirstOrDefault();
 
             PositionComponent positionComponent =
-                    GetComponentByEntityId<PositionComponent>(entityId);
+                    GetComponentsByEntityId<PositionComponent>(entityId).FirstOrDefault();
+
+            if (velocityComponent == null || positionComponent == null) return;
 
             positionComponent.X += velocityComponent.Velocity.X;
             positionComponent.Y += velocityComponent.Velocity.Y;
+
+            Console.WriteLine("X: " + positionComponent.X);
+            Console.WriteLine("Y: " + positionComponent.Y);
 
             velocityComponent.Velocity = Vector2.Zero;
         }
@@ -43,10 +48,12 @@ namespace Atom.Physics.Movement
                 MoveDirection direction = moveMessage.GetMoveDirection();
 
                 SpeedComponent speedComponent = 
-                    GetComponentByEntityId<SpeedComponent>(moveMessage.GetEntityId());
+                    GetComponentsByEntityId<SpeedComponent>(moveMessage.GetEntityId()).FirstOrDefault();
 
                 VelocityComponent velocityComponent =
-                    GetComponentByEntityId<VelocityComponent>(moveMessage.GetEntityId());
+                    GetComponentsByEntityId<VelocityComponent>(moveMessage.GetEntityId()).FirstOrDefault();
+
+                if (velocityComponent == null || speedComponent == null) return;
 
                 switch (direction)
                 {
