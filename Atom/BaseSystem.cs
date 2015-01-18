@@ -86,22 +86,24 @@ namespace Atom
         }
 
         /// <summary>
-        /// Gets the component that match the entity id and type given
+        /// Gets the components that match the entity id and type given
         /// </summary>
         /// <typeparam name="T">The component type to return</typeparam>
         /// <param name="entityId">The id of the entity</param>
         /// <returns></returns>
-        protected T GetComponentByEntityId<T>(int entityId) where T : class
+        protected List<T> GetComponentsByEntityId<T>(int entityId) where T : class
         {
+            List<T> components = new List<T>();
+
             foreach (Component component in _components)
             {
                 if (component.GetType() == typeof (T) && !component.Disabled && component.EntityId == entityId)
                 {
-                    return component as T;
+                    components.Add(component as T);
                 }
             }
 
-            return null;
+            return components;
         }
     }
 }
