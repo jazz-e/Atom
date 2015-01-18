@@ -16,6 +16,8 @@ namespace AtomDemo
             {
                 new PositionComponent() { EntityId = Id },
                 new VelocityComponent() { EntityId = Id },
+                new SpeedComponent() { EntityId = Id, Speed = 10.0F },
+
                 new AnimatedSpriteComponent() { EntityId = Id },
 
                 new FirstPersonKeyComponent() { 

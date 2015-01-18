@@ -62,17 +62,14 @@ namespace Atom.World
             if (entity == null)
                 throw new ArgumentNullException();
 
-            if (_entities.Where(ent => ent.Id == entity.Id).Count() > 0)
+            if (_entities.Count(ent => ent.Id == entity.Id) > 0)
                 entity.Id = EntityFactory.GetInstance().GetNextEntityId();
 
             _entities.Add(entity);
 
             foreach (BaseSystem system in _systems)
             {
-                foreach (Component component in components)
-                {
-                    system.AddComponent(component);
-                }
+                system.AddEntityComponents(entity.Id, components);
             }
             return entity;
         }
@@ -92,7 +89,7 @@ namespace Atom.World
 
         public BaseEntity GetEntity(int id)
         {
-            return _entities.Where(entity => entity.Id == id).First();
+            return _entities.First(entity => entity.Id == id);
         }
     }
 }

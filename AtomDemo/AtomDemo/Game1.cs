@@ -1,9 +1,13 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Atom;
 using Atom.Entity;
 using Atom.Logging;
+using Atom.Logging.Loggers;
 using Atom.Messaging;
+using Atom.Physics.Movement;
+using Atom.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
@@ -17,6 +21,8 @@ namespace AtomDemo
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        MovementSystem movementSystem = new MovementSystem();
+        PlayerEntity entity;
 
         public Game1()
         {
@@ -38,7 +44,8 @@ namespace AtomDemo
 
             EntityFactory.GetInstance().Register<PlayerEntity>();
 
-            PlayerEntity entity = entityFactory.Construct<PlayerEntity>();
+            
+            entity = entityFactory.Construct<PlayerEntity>();
             PlayerEntity entity1 = entityFactory.Construct<PlayerEntity>();
 
             List<Component> components = entity.CreateDefaultComponents();
@@ -51,6 +58,10 @@ namespace AtomDemo
 
             TestSystem system = new TestSystem();
             TestSystem system2 = new TestSystem();
+
+            movementSystem.AddEntityComponents(entity.Id, components);
+
+            PostOffice.SendMessage(new MoveMessage(entity.Id, MoveDirection.Up));
 
             system.SendMessage();
             
@@ -91,6 +102,8 @@ namespace AtomDemo
                 this.Exit();
 
             // TODO: Add your update logic here
+
+            movementSystem.Update(gameTime, entity.Id);
 
             base.Update(gameTime);
         }

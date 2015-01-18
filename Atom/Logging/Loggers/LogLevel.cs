@@ -1,4 +1,4 @@
-﻿namespace Atom.Logging
+﻿namespace Atom.Logging.Loggers
 {
     public enum LogLevel
     {

@@ -41,5 +41,38 @@ namespace Atom
         {
             return _filters.FindAll(filterType => filterType.FullName == type.FullName).Count > 0;
         }
+
+        /// <summary>
+        /// Checks to see if the given list has one of each of the filters
+        /// </summary>
+        /// <param name="types">The types to check</param>
+        /// <returns></returns>
+        public bool ContainsAll(List<Type> types)
+        {
+            int matches = 0;
+
+            foreach (Type filter in _filters)
+            {
+                if (types.Exists(type => type == filter))
+                {
+                    matches++;
+                }
+            }
+
+            return matches == _filters.Count;
+        }
+
+        /// <summary>
+        /// Returns objects that only match the filters
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="objects">The objects you want to filter</param>
+        /// <returns></returns>
+        public List<T> FilterList<T>(IEnumerable<T> objects)
+        {
+            List<T> filteredList = objects.Where(obj => Contains(obj.GetType())).ToList();
+
+            return filteredList;
+        }
     }
 }
