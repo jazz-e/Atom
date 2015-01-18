@@ -20,39 +20,39 @@ namespace AtomDemo
 
                 new AnimatedSpriteComponent() { EntityId = Id },
 
-                new FirstPersonKeyComponent() { 
+                new StandardKeyComponent() { 
                     EntityId = Id, 
-                    Action = FirstPersonKeyComponent.FirstPersonActions.Up, 
+                    Action = StandardInputActions.Up, 
                     Key = Keys.W
                 },
 
-                new FirstPersonKeyComponent() { 
+                new StandardKeyComponent() { 
                     EntityId = Id, 
-                    Action = FirstPersonKeyComponent.FirstPersonActions.Down, 
+                    Action = StandardInputActions.Down, 
                     Key = Keys.S
                 },
 
-                new FirstPersonKeyComponent() { 
+                new StandardKeyComponent() { 
                     EntityId = Id, 
-                    Action = FirstPersonKeyComponent.FirstPersonActions.Left, 
+                    Action = StandardInputActions.Left, 
                     Key = Keys.A
                 },
 
-                new FirstPersonKeyComponent() { 
+                new StandardKeyComponent() { 
                     EntityId = Id, 
-                    Action = FirstPersonKeyComponent.FirstPersonActions.Right, 
+                    Action = StandardInputActions.Right, 
                     Key = Keys.D
                 },
 
-                new FirstPersonKeyComponent() { 
+                new StandardKeyComponent() { 
                     EntityId = Id, 
-                    Action = FirstPersonKeyComponent.FirstPersonActions.Fire, 
+                    Action = StandardInputActions.Fire, 
                     Key = Keys.Space
                 },
 
-                new FirstPersonKeyComponent() { 
+                new StandardKeyComponent() { 
                     EntityId = Id, 
-                    Action = FirstPersonKeyComponent.FirstPersonActions.AltFire, 
+                    Action = StandardInputActions.AltFire, 
                     Key = Keys.Q
                 }
 
