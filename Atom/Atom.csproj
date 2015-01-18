@@ -67,7 +67,9 @@
     <Compile Include="Exceptions\NotILoggerException.cs" />
     <Compile Include="Graphics\AnimatedSpriteComponent.cs" />
     <Compile Include="Component.cs" />
-    <Compile Include="Input\FirstPersonKeyComponent.cs" />
+    <Compile Include="Input\StandardInputActions.cs" />
+    <Compile Include="Input\StandardKeyboardSystem.cs" />
+    <Compile Include="Input\StandardKeyComponent.cs" />
     <Compile Include="Logging\Loggers\ILogger.cs" />
     <Compile Include="Logging\LogFactory.cs" />
     <Compile Include="Logging\Loggers\ConsoleLogger.cs" />
