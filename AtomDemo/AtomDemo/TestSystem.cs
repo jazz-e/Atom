@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace AtomDemo
 {
-    public class TestSystem : Atom.System, IReceiver
+    public class TestSystem : Atom.BaseSystem, IReceiver
     {
         public int Id { get; set; }
         public List<PositionComponent> PositionComponents;  

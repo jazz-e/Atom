@@ -9,7 +9,7 @@ namespace Atom.World
 {
     public class World
     {
-        private List<System> _systems = new List<System>();
+        private List<BaseSystem> _systems = new List<BaseSystem>();
         private HashSet<BaseEntity> _entities = new HashSet<BaseEntity>();
 
         public bool Paused { get; set; }
@@ -24,7 +24,7 @@ namespace Atom.World
             if (Paused)
                 return;
 
-            foreach (System system in _systems)
+            foreach (BaseSystem system in _systems)
             {
                 foreach (BaseEntity entity in _entities)
                 {
@@ -35,7 +35,7 @@ namespace Atom.World
 
         public virtual void Draw(SpriteBatch spriteBatch)
         {
-            foreach (System system in _systems)
+            foreach (BaseSystem system in _systems)
             {
                 foreach (BaseEntity entity in _entities)
                 {
@@ -44,7 +44,7 @@ namespace Atom.World
             }
         }
 
-        public void AddSystem(System system)
+        public void AddSystem(BaseSystem system)
         {
             if (system == null)
                 throw new ArgumentNullException();
@@ -52,7 +52,7 @@ namespace Atom.World
             _systems.Add(system);
         }
 
-        public void RemoveSystem<T>() where T : System
+        public void RemoveSystem<T>() where T : BaseSystem
         {
             _systems.RemoveAll(system => system.GetType() == typeof (T));
         }
@@ -67,7 +67,7 @@ namespace Atom.World
 
             _entities.Add(entity);
 
-            foreach (System system in _systems)
+            foreach (BaseSystem system in _systems)
             {
                 foreach (Component component in components)
                 {
@@ -83,7 +83,7 @@ namespace Atom.World
 
             foreach (BaseEntity entity in removeEntities)
             {
-                foreach (System system in _systems)
+                foreach (BaseSystem system in _systems)
                 {
                     system.RemoveEntityComponents(id);
                 }

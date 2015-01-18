@@ -4,7 +4,7 @@ using Microsoft.Xna.Framework.Graphics;
 
 namespace Atom
 {
-    public abstract class System
+    public abstract class BaseSystem
     {
         public abstract void Update(GameTime gameTime, int entityId);
 
