@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Atom.Graphics;
 using Atom.Messaging;
 using Microsoft.Xna.Framework;
@@ -15,6 +14,8 @@ namespace Atom.Rendering.Static
         {
             ComponentTypeFilter = new TypeFilter()
                 .AddFilter(typeof(SpriteComponent));
+
+            PostOffice.Subscribe(this);
         }
 
         public override void Draw(SpriteBatch spriteBatch, int entityId)
@@ -33,12 +34,25 @@ namespace Atom.Rendering.Static
 
         public void OnMessage(IMessage message)
         {
-            throw new NotImplementedException();
+            if (message.GetType() == typeof(PositionMessage))
+            {
+                PositionMessage positionMessage = (PositionMessage) message;
+
+                Point position = positionMessage.GetPostion();
+
+                SpriteComponent spriteComponent = 
+                    GetComponentsByEntityId<SpriteComponent>(positionMessage.GetEntityId()).FirstOrDefault();
+
+                if (spriteComponent == null) return;
+
+                spriteComponent.Location = position;
+            }
         }
 
         public TypeFilter GetMessageTypeFilter()
         {
-            throw new NotImplementedException();
+            return new TypeFilter()
+                .AddFilter(typeof(PositionMessage));
         }
     }
 }
