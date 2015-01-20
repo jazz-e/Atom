@@ -1,21 +1,21 @@
 ﻿using System.Linq;
 using Atom.Graphics;
 using Atom.Messaging;
+using Atom.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
 namespace Atom.Rendering.Static
 {
-    public class StaticRenderSystem : BaseSystem, IReceiver
+    public class StaticRenderSystem : BaseSystem
     {
         public int Id { get; set; }
 
         public StaticRenderSystem()
         {
             ComponentTypeFilter = new TypeFilter()
-                .AddFilter(typeof(SpriteComponent));
-
-            PostOffice.Subscribe(this);
+                .AddFilter(typeof(SpriteComponent))
+                .AddFilter((typeof(PositionComponent)));
         }
 
         public override void Draw(SpriteBatch spriteBatch, int entityId)
@@ -23,36 +23,16 @@ namespace Atom.Rendering.Static
             SpriteComponent spriteComponent = 
                 GetComponentsByEntityId<SpriteComponent>(entityId).FirstOrDefault();
 
-            if (spriteComponent == null) return;
+            PositionComponent positionComponent =
+                GetComponentsByEntityId<PositionComponent>(entityId).FirstOrDefault();
+
+            if (spriteComponent == null || positionComponent == null) return;
 
             Rectangle spriteRectangle = 
-                new Rectangle(spriteComponent.Location.X, spriteComponent.Location.Y, 
+                new Rectangle((int)positionComponent.X, (int)positionComponent.Y, 
                     spriteComponent.FrameWidth, spriteComponent.FrameHeight);
  
             spriteBatch.Draw(spriteComponent.Image, spriteRectangle, Color.White);
-        }
-
-        public void OnMessage(IMessage message)
-        {
-            if (message.GetType() == typeof(PositionMessage))
-            {
-                PositionMessage positionMessage = (PositionMessage) message;
-
-                Point position = positionMessage.GetPostion();
-
-                SpriteComponent spriteComponent = 
-                    GetComponentsByEntityId<SpriteComponent>(positionMessage.GetEntityId()).FirstOrDefault();
-
-                if (spriteComponent == null) return;
-
-                spriteComponent.Location = position;
-            }
-        }
-
-        public TypeFilter GetMessageTypeFilter()
-        {
-            return new TypeFilter()
-                .AddFilter(typeof(PositionMessage));
         }
     }
 }

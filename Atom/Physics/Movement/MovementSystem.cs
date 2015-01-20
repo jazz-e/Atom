@@ -37,10 +37,6 @@ namespace Atom.Physics.Movement
             Console.WriteLine("X: " + positionComponent.X);
             Console.WriteLine("Y: " + positionComponent.Y);
 
-            PostOffice.SendMessage(
-                new PositionMessage().SetEntityId(entityId)
-                    .SetPosition(new Point((int) positionComponent.X, (int) positionComponent.Y)));
-
             velocityComponent.Velocity = Vector2.Zero;
         }
         
