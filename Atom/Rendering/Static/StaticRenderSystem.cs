@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Atom.Graphics;
-using Atom.Messaging;
 using Atom.Physics;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
