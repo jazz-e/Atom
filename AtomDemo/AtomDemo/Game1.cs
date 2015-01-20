@@ -1,13 +1,12 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using Atom;
 using Atom.Entity;
+using Atom.Graphics;
 using Atom.Input;
 using Atom.Logging;
 using Atom.Logging.Loggers;
-using Atom.Messaging;
 using Atom.Physics.Movement;
+using Atom.Rendering.Static;
 using Atom.World;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -53,6 +52,16 @@ namespace AtomDemo
             PlayerEntity entity1 = entityFactory.Construct<PlayerEntity>();
 
             List<Component> components = entity.CreateDefaultComponents();
+            SpriteComponent spriteComponent = new SpriteComponent()
+            {
+                EntityId = entity.Id,
+                Image = this.Content.Load<Texture2D>("space_invader"),
+                FrameWidth = 100,
+                FrameHeight = 100,
+                Location = new Point(10, 10),
+            };
+
+            components.Add(spriteComponent);
 
             ILogger logger = LogFactory.GetInstance().Construct("Console");
 
@@ -62,8 +71,11 @@ namespace AtomDemo
 
             StandardKeyboardSystem standardKeyboardSystem = new StandardKeyboardSystem();
 
+            StaticRenderSystem staticRenderSystem = new StaticRenderSystem();
+
             world.AddSystem(movementSystem);
             world.AddSystem(standardKeyboardSystem);
+            world.AddSystem(staticRenderSystem);
 
             world.AddEntity(entity, components);
             
