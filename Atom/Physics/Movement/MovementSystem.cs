@@ -34,9 +34,6 @@ namespace Atom.Physics.Movement
             positionComponent.X += velocityComponent.Velocity.X;
             positionComponent.Y += velocityComponent.Velocity.Y;
 
-            Console.WriteLine("X: " + positionComponent.X);
-            Console.WriteLine("Y: " + positionComponent.Y);
-
             velocityComponent.Velocity = Vector2.Zero;
         }
         

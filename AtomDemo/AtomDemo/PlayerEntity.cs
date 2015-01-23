@@ -4,6 +4,7 @@ using Atom.Entity;
 using Atom.Graphics;
 using Atom.Input;
 using Atom.Physics;
+using Atom.Physics.Collision.BoundingBox;
 using Microsoft.Xna.Framework.Input;
 
 namespace AtomDemo
@@ -17,8 +18,6 @@ namespace AtomDemo
                 new PositionComponent() { EntityId = Id },
                 new VelocityComponent() { EntityId = Id },
                 new SpeedComponent() { EntityId = Id, Speed = 10.0F },
-
-                new AnimatedSpriteComponent() { EntityId = Id },
 
                 new StandardKeyComponent() { 
                     EntityId = Id, 
@@ -54,6 +53,14 @@ namespace AtomDemo
                     EntityId = Id, 
                     Action = StandardInputActions.AltFire, 
                     Key = Keys.Q
+                },
+
+                new BoundingBoxComponent()
+                {
+                    Active = true,
+                    Width = 100,
+                    Height = 100,
+                    EntityId = Id
                 }
 
             };

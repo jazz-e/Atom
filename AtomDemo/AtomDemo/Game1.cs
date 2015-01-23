@@ -5,6 +5,8 @@ using Atom.Graphics;
 using Atom.Input;
 using Atom.Logging;
 using Atom.Logging.Loggers;
+using Atom.Physics.Collision;
+using Atom.Physics.Collision.BoundingBox;
 using Atom.Physics.Movement;
 using Atom.Rendering.Static;
 using Atom.World;
@@ -21,7 +23,6 @@ namespace AtomDemo
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        MovementSystem movementSystem = new MovementSystem();
         PlayerEntity entity;
         private World world;
 
@@ -61,6 +62,15 @@ namespace AtomDemo
                 Location = new Point(10, 10),
             };
 
+            SpriteComponent spriteComponent1 = new SpriteComponent()
+            {
+                EntityId = entity1.Id,
+                Image = this.Content.Load<Texture2D>("space_invader"),
+                FrameWidth = 100,
+                FrameHeight = 100,
+                Location = new Point(10, 10),
+            };
+
             components.Add(spriteComponent);
 
             ILogger logger = LogFactory.GetInstance().Construct("Console");
@@ -68,16 +78,21 @@ namespace AtomDemo
             logger.Log(LogLevel.Info, components.ToString());
             logger.Log(LogLevel.Warning, "Warning Message");
             logger.Log(LogLevel.Error, "Error message");
+            
+            List<Component> entity1Components = entity1.CreateDefaultComponents();
 
-            StandardKeyboardSystem standardKeyboardSystem = new StandardKeyboardSystem();
+            entity1Components.Add(spriteComponent1);
 
-            StaticRenderSystem staticRenderSystem = new StaticRenderSystem();
+            entity1Components.RemoveAll(component => component.GetType() == typeof (StandardKeyComponent));
 
-            world.AddSystem(movementSystem);
-            world.AddSystem(standardKeyboardSystem);
-            world.AddSystem(staticRenderSystem);
+            world.AddSystem(new MovementSystem());
+            world.AddSystem(new StandardKeyboardSystem());
+            world.AddSystem(new StaticRenderSystem());
+            world.AddSystem(new BoundingBoxSystem());
+            world.AddSystem(new CollisionResolveSystem());
 
             world.AddEntity(entity, components);
+            world.AddEntity(entity1, entity1Components);
             
 
             base.Initialize();
