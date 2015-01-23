@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Atom.Messaging;
 using Atom.Physics.Collision.BoundingBox;
 using Microsoft.Xna.Framework;
@@ -56,26 +57,66 @@ namespace Atom.Physics.Collision
                     targetEntityBoundingBoxComponent.Width,
                     targetEntityBoundingBoxComponent.Height);
 
-                // Source Collided with Bottom of target
-                if (sourceRectangle.Top < targetRectangle.Bottom)
+
+                bool travelingUp = Math.Sign(sourceEntityVelocityComponent.Velocity.Y) == -1;
+                bool travelingDown = Math.Sign(sourceEntityVelocityComponent.Velocity.Y) == 1;
+                bool travelingRight = Math.Sign(sourceEntityVelocityComponent.Velocity.X) == 1;
+                bool travelingLeft = Math.Sign(sourceEntityVelocityComponent.Velocity.X) == -1;
+
+                if (!travelingUp && !travelingDown && !travelingRight && !travelingLeft) return;
+
+                Vector2 displacement = Vector2.Zero;
+
+                float upWeight = 0f;
+                float downWeight = 0f;
+                float rightWeight = 0f;
+                float leftWeight = 0f;
+
+
+                //determine direction of travel
+
+                if (travelingUp)
                 {
-                    sourceEntityPositionComponent.Y = targetRectangle.Bottom;
+                    displacement.Y = Math.Abs(targetRectangle.Bottom - sourceRectangle.Top);
+                    upWeight = displacement.Y / Math.Abs(sourceEntityVelocityComponent.Velocity.Y);
+                }
+                if (travelingDown)
+                {
+                    displacement.Y = Math.Abs(sourceRectangle.Top - targetRectangle.Bottom);
+                    downWeight = displacement.Y / Math.Abs(sourceEntityVelocityComponent.Velocity.Y);
+                }
+                if (travelingRight)
+                {
+                    displacement.X = Math.Abs(targetRectangle.Right - sourceRectangle.Left);
+                    rightWeight = displacement.X / Math.Abs(sourceEntityVelocityComponent.Velocity.X);
+                }
+                if (travelingLeft)
+                {
+                    displacement.X = Math.Abs(sourceRectangle.Left - targetRectangle.Right);
+                    leftWeight = displacement.X / Math.Abs(sourceEntityVelocityComponent.Velocity.X);
                 }
 
-                else if (sourceRectangle.Bottom > targetRectangle.Top)
+                //correct based on direction
+
+                if (leftWeight > rightWeight && leftWeight > upWeight && leftWeight > downWeight)
                 {
-                    sourceEntityPositionComponent.Y = targetRectangle.Top;
+                    sourceEntityPositionComponent.X = targetRectangle.Right + 11;
+                }
+                else if (rightWeight > leftWeight && rightWeight > upWeight && rightWeight > downWeight)
+                {
+                    sourceEntityPositionComponent.X = 
+                        targetRectangle.Left - targetEntityBoundingBoxComponent.Width - 11;
+                }
+                else if (upWeight > leftWeight && upWeight > rightWeight && upWeight > downWeight)
+                {
+                    sourceEntityPositionComponent.Y = targetRectangle.Bottom + 11;
+                }
+                else if (downWeight > leftWeight && downWeight > rightWeight && downWeight > upWeight)
+                {
+                    sourceEntityPositionComponent.Y = 
+                        targetRectangle.Top  - targetEntityBoundingBoxComponent.Height - 11;
                 }
 
-                else if (sourceRectangle.Right > targetRectangle.Left)
-                {
-                    sourceEntityPositionComponent.X = targetRectangle.Left;
-                }
-
-                else if (sourceRectangle.Left < targetRectangle.Right)
-                {
-                    sourceEntityPositionComponent.X = targetRectangle.Right;
-                }
             }
         }
 

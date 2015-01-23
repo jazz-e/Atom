@@ -15,7 +15,7 @@ namespace AtomDemo
         {
             List<Component> components = new List<Component>
             {
-                new PositionComponent() { EntityId = Id },
+                new PositionComponent() { EntityId = Id, X = 300f, Y = 300f},
                 new VelocityComponent() { EntityId = Id },
                 new SpeedComponent() { EntityId = Id, Speed = 10.0F },
 

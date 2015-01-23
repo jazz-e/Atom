@@ -59,7 +59,6 @@ namespace AtomDemo
                 Image = this.Content.Load<Texture2D>("space_invader"),
                 FrameWidth = 100,
                 FrameHeight = 100,
-                Location = new Point(10, 10),
             };
 
             SpriteComponent spriteComponent1 = new SpriteComponent()
@@ -68,7 +67,6 @@ namespace AtomDemo
                 Image = this.Content.Load<Texture2D>("space_invader"),
                 FrameWidth = 100,
                 FrameHeight = 100,
-                Location = new Point(10, 10),
             };
 
             components.Add(spriteComponent);
