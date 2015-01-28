@@ -83,11 +83,12 @@ namespace AtomDemo
 
             entity1Components.RemoveAll(component => component.GetType() == typeof (StandardKeyComponent));
 
-            world.AddSystem(new MovementSystem());
             world.AddSystem(new StandardKeyboardSystem());
-            world.AddSystem(new StaticRenderSystem());
+            world.AddSystem(new MovementSystem());
             world.AddSystem(new BoundingBoxSystem());
             world.AddSystem(new CollisionResolveSystem());
+            
+            world.AddSystem(new StaticRenderSystem());
 
             world.AddEntity(entity, components);
             world.AddEntity(entity1, entity1Components);

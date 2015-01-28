@@ -58,64 +58,86 @@ namespace Atom.Physics.Collision
                     targetEntityBoundingBoxComponent.Height);
 
 
-                bool travelingUp = Math.Sign(sourceEntityVelocityComponent.Velocity.Y) == -1;
-                bool travelingDown = Math.Sign(sourceEntityVelocityComponent.Velocity.Y) == 1;
-                bool travelingRight = Math.Sign(sourceEntityVelocityComponent.Velocity.X) == 1;
-                bool travelingLeft = Math.Sign(sourceEntityVelocityComponent.Velocity.X) == -1;
+                bool travellingUp = Math.Sign(sourceEntityVelocityComponent.PreviousVelocity.Y) == -1;
+                bool travellingDown = Math.Sign(sourceEntityVelocityComponent.PreviousVelocity.Y) == 1;
+                bool travellingRight = Math.Sign(sourceEntityVelocityComponent.PreviousVelocity.X) == 1;
+                bool travellingLeft = Math.Sign(sourceEntityVelocityComponent.PreviousVelocity.X) == -1;
 
-                if (!travelingUp && !travelingDown && !travelingRight && !travelingLeft) return;
+                //if (!travelingUp && !travelingDown && !travelingRight && !travelingLeft) return;
 
-                Vector2 displacement = Vector2.Zero;
+                Rectangle overlapRectangle = new Rectangle();
 
-                float upWeight = 0f;
-                float downWeight = 0f;
-                float rightWeight = 0f;
-                float leftWeight = 0f;
+                float timeY = 0f;
+                float timeX = 0F;
+
+                float newSourceX = sourceEntityPositionComponent.X;
+                float newSourceY = sourceEntityPositionComponent.Y;
+
+                if (travellingUp)
+                {
+                    overlapRectangle.Y = sourceRectangle.Y;
+                    overlapRectangle.Height = Math.Abs(targetRectangle.Bottom - sourceRectangle.Top);
+
+                    timeY = overlapRectangle.Y / Math.Abs(sourceEntityVelocityComponent.PreviousVelocity.Y);
+
+                    newSourceY += overlapRectangle.Height;
+
+                    sourceEntityPositionComponent.Y += sourceEntityVelocityComponent.PreviousVelocity.Y * -1;
+                }
+                
+                if (travellingDown)
+                {
+                    overlapRectangle.Y = targetRectangle.Y;
+                    overlapRectangle.Height = Math.Abs(sourceRectangle.Bottom - targetRectangle.Top);
+
+                    timeY = overlapRectangle.Y / Math.Abs(sourceEntityVelocityComponent.PreviousVelocity.Y);
+
+                    newSourceY -= overlapRectangle.Height;
+
+                    sourceEntityPositionComponent.Y -= sourceEntityVelocityComponent.PreviousVelocity.Y * -1;
+                }
+
+                if (travellingRight)
+                {
+                    overlapRectangle.X = targetRectangle.X;
+                    overlapRectangle.Width = Math.Abs(sourceRectangle.Right - targetRectangle.Left);
+
+                    timeX = overlapRectangle.X / Math.Abs(sourceEntityVelocityComponent.PreviousVelocity.X);
+
+                    newSourceX -= overlapRectangle.Width;
+
+                    sourceEntityPositionComponent.X -= sourceEntityVelocityComponent.PreviousVelocity.X * -1;
+                }
+                
+                if (travellingLeft)
+                {
+                    overlapRectangle.X = sourceRectangle.X;
+                    overlapRectangle.Width = Math.Abs(sourceRectangle.Left - targetRectangle.Right);
+
+                    timeX = overlapRectangle.X / Math.Abs(sourceEntityVelocityComponent.PreviousVelocity.X);
+
+                    newSourceX += overlapRectangle.Width;
+
+                    sourceEntityPositionComponent.X += sourceEntityVelocityComponent.PreviousVelocity.X*-1;
+                }
+
+                Console.WriteLine("TimeX: " + timeX);
+                Console.WriteLine("TimeY: " + timeY);
+
+                if (timeX > timeY)
+                {
+                    //sourceEntityPositionComponent.X = newSourceX;
+                }
+
+                if (timeY > timeX)
+                {
+                    //sourceEntityPositionComponent.Y = newSourceY;
+                }
 
 
-                //determine direction of travel
+                
 
-                if (travelingUp)
-                {
-                    displacement.Y = Math.Abs(targetRectangle.Bottom - sourceRectangle.Top);
-                    upWeight = displacement.Y / Math.Abs(sourceEntityVelocityComponent.Velocity.Y);
-                }
-                if (travelingDown)
-                {
-                    displacement.Y = Math.Abs(sourceRectangle.Top - targetRectangle.Bottom);
-                    downWeight = displacement.Y / Math.Abs(sourceEntityVelocityComponent.Velocity.Y);
-                }
-                if (travelingRight)
-                {
-                    displacement.X = Math.Abs(targetRectangle.Right - sourceRectangle.Left);
-                    rightWeight = displacement.X / Math.Abs(sourceEntityVelocityComponent.Velocity.X);
-                }
-                if (travelingLeft)
-                {
-                    displacement.X = Math.Abs(sourceRectangle.Left - targetRectangle.Right);
-                    leftWeight = displacement.X / Math.Abs(sourceEntityVelocityComponent.Velocity.X);
-                }
 
-                //correct based on direction
-
-                if (leftWeight > rightWeight && leftWeight > upWeight && leftWeight > downWeight)
-                {
-                    sourceEntityPositionComponent.X = targetRectangle.Right + 11;
-                }
-                else if (rightWeight > leftWeight && rightWeight > upWeight && rightWeight > downWeight)
-                {
-                    sourceEntityPositionComponent.X = 
-                        targetRectangle.Left - targetEntityBoundingBoxComponent.Width - 11;
-                }
-                else if (upWeight > leftWeight && upWeight > rightWeight && upWeight > downWeight)
-                {
-                    sourceEntityPositionComponent.Y = targetRectangle.Bottom + 11;
-                }
-                else if (downWeight > leftWeight && downWeight > rightWeight && downWeight > upWeight)
-                {
-                    sourceEntityPositionComponent.Y = 
-                        targetRectangle.Top  - targetEntityBoundingBoxComponent.Height - 11;
-                }
 
             }
         }
