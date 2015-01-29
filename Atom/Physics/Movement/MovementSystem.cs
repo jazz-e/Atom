@@ -31,11 +31,10 @@ namespace Atom.Physics.Movement
 
             if (velocityComponent == null || positionComponent == null) return;
 
-            positionComponent.X += velocityComponent.Velocity.X;
-            positionComponent.Y += velocityComponent.Velocity.Y;
+            positionComponent.X += velocityComponent.Velocity.X * gameTime.ElapsedGameTime.Ticks;
+            positionComponent.Y += velocityComponent.Velocity.Y * gameTime.ElapsedGameTime.Ticks;
 
-            Console.WriteLine("X: " + positionComponent.X);
-            Console.WriteLine("Y: " + positionComponent.Y);
+            velocityComponent.PreviousVelocity = velocityComponent.Velocity;
 
             velocityComponent.Velocity = Vector2.Zero;
         }

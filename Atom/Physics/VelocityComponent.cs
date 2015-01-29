@@ -8,5 +8,7 @@ namespace Atom.Physics
         /// The X and Y Velocity of the entity
         /// </summary>
         public Vector2 Velocity { get; set; }
+
+        public Vector2 PreviousVelocity { get; set; }
     }
 }
