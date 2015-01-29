@@ -12,7 +12,7 @@ namespace Atom.Physics.Collision
 
         public CollisionMessage(int sourceEntityid, int targetEntityId)
         {
-            Data = new string[2];
+            Data = new string[3];
 
             SetSourceCollidable(sourceEntityid);
             SetTargetCollidable(targetEntityId);
@@ -37,5 +37,6 @@ namespace Atom.Physics.Collision
         {
             return Convert.ToInt32(Data[1]);
         }
+
     }
 }

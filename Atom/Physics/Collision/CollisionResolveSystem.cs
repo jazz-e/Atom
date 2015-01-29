@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Atom.Messaging;
 using Atom.Physics.Collision.BoundingBox;
 using Microsoft.Xna.Framework;
@@ -56,26 +57,41 @@ namespace Atom.Physics.Collision
                     targetEntityBoundingBoxComponent.Width,
                     targetEntityBoundingBoxComponent.Height);
 
-                // Source Collided with Bottom of target
-                if (sourceRectangle.Top < targetRectangle.Bottom)
-                {
-                    sourceEntityPositionComponent.Y = targetRectangle.Bottom;
-                }
+                Vector2 sourceMinimum = new Vector2(sourceRectangle.X, sourceRectangle.Y);
+                Vector2 sourceMaximum = new Vector2(sourceRectangle.Right, sourceRectangle.Bottom);
 
-                else if (sourceRectangle.Bottom > targetRectangle.Top)
-                {
-                    sourceEntityPositionComponent.Y = targetRectangle.Top;
-                }
+                Vector2 targetMinimum = new Vector2(targetRectangle.X, targetRectangle.Y);
+                Vector2 targetMaximum = new Vector2(targetRectangle.Right, targetRectangle.Bottom);
 
-                else if (sourceRectangle.Right > targetRectangle.Left)
-                {
-                    sourceEntityPositionComponent.X = targetRectangle.Left;
-                }
+                Vector2 MinimumTranslationDistance = new Vector2();
 
-                else if (sourceRectangle.Left < targetRectangle.Right)
-                {
-                    sourceEntityPositionComponent.X = targetRectangle.Right;
-                }
+                float left = (targetMinimum.X - sourceMaximum.X);
+                float right = (targetMaximum.X - sourceMinimum.X);
+                float top = (targetMinimum.Y - sourceMaximum.Y);
+                float bottom = (targetMaximum.Y - sourceMinimum.Y);
+
+                if (left > 0 || right < 0) throw new Exception("no intersection");
+                if (top > 0 || bottom < 0) throw new Exception("no intersection");
+
+                // box intersect. work out the mtd on both x and y axes.
+                if (Math.Abs(left) < right)
+                    MinimumTranslationDistance.X = left;
+                else
+                    MinimumTranslationDistance.X = right;
+
+                if (Math.Abs(top) < bottom)
+                    MinimumTranslationDistance.Y = top;
+                else
+                    MinimumTranslationDistance.Y = bottom;
+
+                // 0 the axis with the largest mtd value.
+                if (Math.Abs(MinimumTranslationDistance.X) < Math.Abs(MinimumTranslationDistance.Y))
+                    MinimumTranslationDistance.Y = 0;
+                else
+                    MinimumTranslationDistance.X = 0;
+
+                sourceEntityPositionComponent.X += MinimumTranslationDistance.X;
+                sourceEntityPositionComponent.Y += MinimumTranslationDistance.Y;
             }
         }
 
