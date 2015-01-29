@@ -97,6 +97,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Physics\Collision\PerPixel\" />
+    <Folder Include="Rendering\Animated\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\XNA Game Studio\Microsoft.Xna.GameStudio.targets" />
