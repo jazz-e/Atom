@@ -129,7 +129,7 @@ namespace AtomDemo
             world.AddSystem(new StandardKeyboardSystem());
             world.AddSystem(new MovementSystem());
             world.AddSystem(new BoundingBoxSystem());
-            world.AddSystem(new CollisionResolveSystem());
+            world.AddSystem(new BoundingBoxCollisionResponseSystem());
             
             world.AddSystem(new StaticRenderSystem());
 

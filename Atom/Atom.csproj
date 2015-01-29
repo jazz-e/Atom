@@ -77,11 +77,11 @@
     <Compile Include="Messaging\IMessage.cs" />
     <Compile Include="Messaging\IReceiver.cs" />
     <Compile Include="Messaging\PostOffice.cs" />
+    <Compile Include="Physics\Collision\BoundingBox\BoundingBoxCollisionResponseSystem.cs" />
     <Compile Include="Physics\Collision\BoundingBox\BoundingBoxComponent.cs" />
     <Compile Include="Physics\Collision\BoundingBox\BoundingBoxSystem.cs" />
     <Compile Include="Physics\Collision\CollisionComponent.cs" />
     <Compile Include="Physics\Collision\CollisionMessage.cs" />
-    <Compile Include="Physics\Collision\CollisionResolveSystem.cs" />
     <Compile Include="Physics\Movement\MoveDirection.cs" />
     <Compile Include="Physics\Movement\MovementSystem.cs" />
     <Compile Include="Physics\Movement\MoveMessage.cs" />
