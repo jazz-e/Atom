@@ -38,6 +38,5 @@ namespace Atom.Physics.Collision
             return Convert.ToInt32(Data[1]);
         }
 
-        public void SetElaspedTime(int )
     }
 }

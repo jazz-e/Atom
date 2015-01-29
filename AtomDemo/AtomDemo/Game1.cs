@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 using Atom;
 using Atom.Entity;
 using Atom.Graphics;
 using Atom.Input;
 using Atom.Logging;
 using Atom.Logging.Loggers;
+using Atom.Physics;
 using Atom.Physics.Collision;
 using Atom.Physics.Collision.BoundingBox;
 using Atom.Physics.Movement;
@@ -52,6 +54,8 @@ namespace AtomDemo
             entity = entityFactory.Construct<PlayerEntity>();
             PlayerEntity entity1 = entityFactory.Construct<PlayerEntity>();
 
+            PlayerEntity entity2 = entityFactory.Construct<PlayerEntity>();
+
             List<Component> components = entity.CreateDefaultComponents();
             SpriteComponent spriteComponent = new SpriteComponent()
             {
@@ -69,6 +73,14 @@ namespace AtomDemo
                 FrameHeight = 100,
             };
 
+            SpriteComponent spriteComponent2 = new SpriteComponent()
+            {
+                EntityId = entity2.Id,
+                Image = this.Content.Load<Texture2D>("space_invader"),
+                FrameWidth = 100,
+                FrameHeight = 100,
+            };
+
             components.Add(spriteComponent);
 
             ILogger logger = LogFactory.GetInstance().Construct("Console");
@@ -79,9 +91,40 @@ namespace AtomDemo
             
             List<Component> entity1Components = entity1.CreateDefaultComponents();
 
+            List<Component> entity2Components = entity2.CreateDefaultComponents();
+
             entity1Components.Add(spriteComponent1);
 
+            entity2Components.Add(spriteComponent2);
+
             entity1Components.RemoveAll(component => component.GetType() == typeof (StandardKeyComponent));
+
+            entity2Components.RemoveAll(component => component.GetType() == typeof(StandardKeyComponent));
+
+            entity2Components.Where(component => component.GetType() == typeof(PositionComponent)).ToList().ForEach(
+                (Component component) =>
+                {
+                    if (component.GetType() == typeof (PositionComponent))
+                    {
+                        var position = (PositionComponent) component;
+
+                        position.X += 100;
+                        position.Y -= 100;
+                    }
+                    
+                });
+
+            components.Where(component => component.GetType() == typeof(PositionComponent)).ToList().ForEach(
+                (Component component) =>
+                {
+                    if (component.GetType() == typeof(PositionComponent))
+                    {
+                        var position = (PositionComponent)component;
+
+                        position.Y -= 300;
+                    }
+
+                });
 
             world.AddSystem(new StandardKeyboardSystem());
             world.AddSystem(new MovementSystem());
@@ -92,6 +135,7 @@ namespace AtomDemo
 
             world.AddEntity(entity, components);
             world.AddEntity(entity1, entity1Components);
+            world.AddEntity(entity2, entity2Components);
             
 
             base.Initialize();

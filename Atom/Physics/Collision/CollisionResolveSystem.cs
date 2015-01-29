@@ -57,88 +57,41 @@ namespace Atom.Physics.Collision
                     targetEntityBoundingBoxComponent.Width,
                     targetEntityBoundingBoxComponent.Height);
 
+                Vector2 sourceMinimum = new Vector2(sourceRectangle.X, sourceRectangle.Y);
+                Vector2 sourceMaximum = new Vector2(sourceRectangle.Right, sourceRectangle.Bottom);
 
-                bool travellingUp = Math.Sign(sourceEntityVelocityComponent.PreviousVelocity.Y) == -1;
-                bool travellingDown = Math.Sign(sourceEntityVelocityComponent.PreviousVelocity.Y) == 1;
-                bool travellingRight = Math.Sign(sourceEntityVelocityComponent.PreviousVelocity.X) == 1;
-                bool travellingLeft = Math.Sign(sourceEntityVelocityComponent.PreviousVelocity.X) == -1;
+                Vector2 targetMinimum = new Vector2(targetRectangle.X, targetRectangle.Y);
+                Vector2 targetMaximum = new Vector2(targetRectangle.Right, targetRectangle.Bottom);
 
-                //if (!travelingUp && !travelingDown && !travelingRight && !travelingLeft) return;
+                Vector2 MinimumTranslationDistance = new Vector2();
 
-                Rectangle overlapRectangle = new Rectangle();
+                float left = (targetMinimum.X - sourceMaximum.X);
+                float right = (targetMaximum.X - sourceMinimum.X);
+                float top = (targetMinimum.Y - sourceMaximum.Y);
+                float bottom = (targetMaximum.Y - sourceMinimum.Y);
 
-                float timeY = 0f;
-                float timeX = 0F;
+                if (left > 0 || right < 0) throw new Exception("no intersection");
+                if (top > 0 || bottom < 0) throw new Exception("no intersection");
 
-                float newSourceX = sourceEntityPositionComponent.X;
-                float newSourceY = sourceEntityPositionComponent.Y;
+                // box intersect. work out the mtd on both x and y axes.
+                if (Math.Abs(left) < right)
+                    MinimumTranslationDistance.X = left;
+                else
+                    MinimumTranslationDistance.X = right;
 
-                if (travellingUp)
-                {
-                    overlapRectangle.Y = sourceRectangle.Y;
-                    overlapRectangle.Height = Math.Abs(targetRectangle.Bottom - sourceRectangle.Top);
+                if (Math.Abs(top) < bottom)
+                    MinimumTranslationDistance.Y = top;
+                else
+                    MinimumTranslationDistance.Y = bottom;
 
-                    timeY = overlapRectangle.Y / Math.Abs(sourceEntityVelocityComponent.PreviousVelocity.Y);
+                // 0 the axis with the largest mtd value.
+                if (Math.Abs(MinimumTranslationDistance.X) < Math.Abs(MinimumTranslationDistance.Y))
+                    MinimumTranslationDistance.Y = 0;
+                else
+                    MinimumTranslationDistance.X = 0;
 
-                    newSourceY += overlapRectangle.Height;
-
-                    sourceEntityPositionComponent.Y += sourceEntityVelocityComponent.PreviousVelocity.Y * -1;
-                }
-                
-                if (travellingDown)
-                {
-                    overlapRectangle.Y = targetRectangle.Y;
-                    overlapRectangle.Height = Math.Abs(sourceRectangle.Bottom - targetRectangle.Top);
-
-                    timeY = overlapRectangle.Y / Math.Abs(sourceEntityVelocityComponent.PreviousVelocity.Y);
-
-                    newSourceY -= overlapRectangle.Height;
-
-                    sourceEntityPositionComponent.Y -= sourceEntityVelocityComponent.PreviousVelocity.Y * -1;
-                }
-
-                if (travellingRight)
-                {
-                    overlapRectangle.X = targetRectangle.X;
-                    overlapRectangle.Width = Math.Abs(sourceRectangle.Right - targetRectangle.Left);
-
-                    timeX = overlapRectangle.X / Math.Abs(sourceEntityVelocityComponent.PreviousVelocity.X);
-
-                    newSourceX -= overlapRectangle.Width;
-
-                    sourceEntityPositionComponent.X -= sourceEntityVelocityComponent.PreviousVelocity.X * -1;
-                }
-                
-                if (travellingLeft)
-                {
-                    overlapRectangle.X = sourceRectangle.X;
-                    overlapRectangle.Width = Math.Abs(sourceRectangle.Left - targetRectangle.Right);
-
-                    timeX = overlapRectangle.X / Math.Abs(sourceEntityVelocityComponent.PreviousVelocity.X);
-
-                    newSourceX += overlapRectangle.Width;
-
-                    sourceEntityPositionComponent.X += sourceEntityVelocityComponent.PreviousVelocity.X*-1;
-                }
-
-                Console.WriteLine("TimeX: " + timeX);
-                Console.WriteLine("TimeY: " + timeY);
-
-                if (timeX > timeY)
-                {
-                    //sourceEntityPositionComponent.X = newSourceX;
-                }
-
-                if (timeY > timeX)
-                {
-                    //sourceEntityPositionComponent.Y = newSourceY;
-                }
-
-
-                
-
-
-
+                sourceEntityPositionComponent.X += MinimumTranslationDistance.X;
+                sourceEntityPositionComponent.Y += MinimumTranslationDistance.Y;
             }
         }
 
