@@ -1,7 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Atom.Graphics
+namespace Atom.Graphics.Rendering
 {
     public class SpriteComponent : Component
     {

@@ -10,11 +10,16 @@ using Atom.Physics;
 using Atom.Physics.Collision;
 using Atom.Physics.Collision.BoundingBox;
 using Atom.Physics.Movement;
-using Atom.Rendering.Static;
+using Atom.Graphics.Rendering;
+using Atom.Graphics.Rendering.Static;
+using Atom.Graphics.Rendering.Animated;
 using Atom.World;
+
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+
+
 
 namespace AtomDemo
 {
@@ -55,6 +60,8 @@ namespace AtomDemo
             PlayerEntity entity1 = entityFactory.Construct<PlayerEntity>();
 
             PlayerEntity entity2 = entityFactory.Construct<PlayerEntity>();
+            PlayerEntity entity3 = entityFactory.Construct<PlayerEntity>();
+
 
             List<Component> components = entity.CreateDefaultComponents();
             SpriteComponent spriteComponent = new SpriteComponent()
@@ -81,7 +88,14 @@ namespace AtomDemo
                 FrameHeight = 100,
             };
 
-            components.Add(spriteComponent);
+            AnimatedSpriteComponent aniSprite = new AnimatedSpriteComponent()
+            {
+                EntityId  = entity.Id,
+                Image = this.Content.Load<Texture2D>("runningcat"),
+                FrameWidth = 512, FrameHeight = 256, FrameCount = 7, FramesPerSecond = 16, SequenceStartFrame = 0,
+            };
+
+            components.Add(aniSprite);
 
             ILogger logger = LogFactory.GetInstance().Construct("Console");
 
@@ -92,10 +106,13 @@ namespace AtomDemo
             List<Component> entity1Components = entity1.CreateDefaultComponents();
 
             List<Component> entity2Components = entity2.CreateDefaultComponents();
+            List<Component> entity3Components = entity3.CreateDefaultComponents();
 
             entity1Components.Add(spriteComponent1);
 
             entity2Components.Add(spriteComponent2);
+
+            entity3Components.Add(aniSprite);
 
             entity1Components.RemoveAll(component => component.GetType() == typeof (StandardKeyComponent));
 
@@ -132,11 +149,12 @@ namespace AtomDemo
             world.AddSystem(new BoundingBoxCollisionResponseSystem());
             
             world.AddSystem(new StaticRenderSystem());
+            world.AddSystem(new AnimatedRenderSystem());
 
             world.AddEntity(entity, components);
-            world.AddEntity(entity1, entity1Components);
-            world.AddEntity(entity2, entity2Components);
-            
+            //world.AddEntity(entity1, entity1Components);
+            //world.AddEntity(entity2, entity2Components);
+            //world.AddEntity(entity3, entity3Components);
 
             base.Initialize();
         }
