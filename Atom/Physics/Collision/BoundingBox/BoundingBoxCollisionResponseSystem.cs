@@ -7,7 +7,6 @@ namespace Atom.Physics.Collision.BoundingBox
 {
     public class BoundingBoxCollisionResponseSystem : BaseSystem, IReceiver
     {
-
         public BoundingBoxCollisionResponseSystem()
         {
             ComponentTypeFilter = new TypeFilter()
@@ -17,8 +16,6 @@ namespace Atom.Physics.Collision.BoundingBox
 
             PostOffice.Subscribe(this);
         }
-
-        public int Id { get; set; }
 
         public void OnMessage(IMessage message)
         {

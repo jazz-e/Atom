@@ -9,8 +9,6 @@ namespace Atom.Physics.Movement
 {
     public class MovementSystem : BaseSystem, IReceiver
     {
-        public int Id { get; set; }
-
         public MovementSystem()
         {
             ComponentTypeFilter = new TypeFilter()
