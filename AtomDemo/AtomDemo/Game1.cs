@@ -98,7 +98,7 @@ namespace AtomDemo
             AnimatedSequenceComponent aniSequence = new AnimatedSequenceComponent()
             {
                 EntityId = entity.Id,
-                AnimationSequence = new int[] {0, 1, 2, 3 }, CurrentSequenceDirection = SequenceDirection.BACKWARD,
+                AnimationSequence = new int[] {0, 1, 2, 3, 4 }, CurrentSequenceDirection = SequenceDirection.FORWARD,
             };
 
             components.Add(aniSprite);

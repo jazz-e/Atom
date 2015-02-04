@@ -47,8 +47,10 @@ namespace Atom.Graphics.Rendering.Animated
             float frameRate = (1f / animatedSpriteComponent.FramesPerSecond) / (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (this.time > frameRate)
-            {
-                //LinearSequence(entityId);
+            { 
+                if(animatedSequenceComponent == null )
+                LinearSequence(entityId);
+                else
                 CompositeSequence(entityId);
                 this.time = 0;
             }
