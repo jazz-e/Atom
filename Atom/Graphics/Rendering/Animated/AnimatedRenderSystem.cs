@@ -23,7 +23,6 @@ namespace Atom.Graphics.Rendering.Animated
                 .AddFilter(typeof(AnimatedSequenceComponent));
         }
 
-
         public void GetComponents(int entityId)
         {
             positionComponent =
@@ -37,8 +36,7 @@ namespace Atom.Graphics.Rendering.Animated
                 new Rectangle((int)positionComponent.X, (int)positionComponent.Y,
                     animatedSpriteComponent.FrameWidth, animatedSpriteComponent.FrameHeight);
         }
-        
-        float delta;
+ 
         int time;
 
         public override void Update(GameTime gameTime, int entityId)
@@ -50,7 +48,8 @@ namespace Atom.Graphics.Rendering.Animated
 
             if (this.time > frameRate)
             {
-                LinearSequence(entityId);
+                //LinearSequence(entityId);
+                CompositeSequence(entityId);
                 this.time = 0;
             }
             else
@@ -93,6 +92,8 @@ namespace Atom.Graphics.Rendering.Animated
 
         public void LinearSequence(int entityId)
         {
+            if (animatedSpriteComponent == null) return;
+
             int endFrame = animatedSpriteComponent.FrameCount;
 
             if (animatedSpriteComponent.FrameIndex < endFrame)
@@ -103,9 +104,32 @@ namespace Atom.Graphics.Rendering.Animated
              SpriteLocation();
         }
 
+        int currentSequenceIndex;
         public void CompositeSequence(int entityId)
         {
+            if (animatedSpriteComponent == null || animatedSequenceComponent == null) return;
 
+            int endFrame = animatedSequenceComponent.AnimationSequence.Count() -1;
+            if (endFrame < 1) return;
+
+            
+                animatedSpriteComponent.FrameIndex =
+                    animatedSequenceComponent.AnimationSequence[currentSequenceIndex];
+                if (animatedSequenceComponent.CurrentSequenceDirection == SequenceDirection.FORWARD)
+                {
+                    currentSequenceIndex++;
+                    if (currentSequenceIndex > endFrame - animatedSpriteComponent.SequenceStartFrame)
+                        currentSequenceIndex = animatedSpriteComponent.SequenceStartFrame;
+                }
+                else if (animatedSequenceComponent.CurrentSequenceDirection == SequenceDirection.BACKWARD)
+                {
+                    currentSequenceIndex--;
+                    if (currentSequenceIndex < animatedSpriteComponent.SequenceStartFrame)
+                        currentSequenceIndex = animatedSpriteComponent.SequenceStartFrame + endFrame;
+                }
+        
+
+            SpriteLocation();
         }
 
         public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, int entityId)
@@ -117,8 +141,5 @@ namespace Atom.Graphics.Rendering.Animated
 
             base.Draw(spriteBatch, entityId);
         }
-
-
-
     }
 }

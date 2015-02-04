@@ -95,7 +95,14 @@ namespace AtomDemo
                 FrameWidth = 512, FrameHeight = 256, FrameCount = 7, FramesPerSecond = 16, SequenceStartFrame = 0,
             };
 
+            AnimatedSequenceComponent aniSequence = new AnimatedSequenceComponent()
+            {
+                EntityId = entity.Id,
+                AnimationSequence = new int[] {0, 1, 2, 3 }, CurrentSequenceDirection = SequenceDirection.BACKWARD,
+            };
+
             components.Add(aniSprite);
+            components.Add(aniSequence);
 
             ILogger logger = LogFactory.GetInstance().Construct("Console");
 
@@ -104,18 +111,16 @@ namespace AtomDemo
             logger.Log(LogLevel.Error, "Error message");
             
             List<Component> entity1Components = entity1.CreateDefaultComponents();
-
             List<Component> entity2Components = entity2.CreateDefaultComponents();
             List<Component> entity3Components = entity3.CreateDefaultComponents();
 
             entity1Components.Add(spriteComponent1);
-
             entity2Components.Add(spriteComponent2);
 
             entity3Components.Add(aniSprite);
+            entity3Components.Add(aniSequence);
 
             entity1Components.RemoveAll(component => component.GetType() == typeof (StandardKeyComponent));
-
             entity2Components.RemoveAll(component => component.GetType() == typeof(StandardKeyComponent));
 
             entity2Components.Where(component => component.GetType() == typeof(PositionComponent)).ToList().ForEach(
@@ -150,7 +155,7 @@ namespace AtomDemo
             
             world.AddSystem(new StaticRenderSystem());
             world.AddSystem(new AnimatedRenderSystem());
-
+            
             world.AddEntity(entity, components);
             //world.AddEntity(entity1, entity1Components);
             //world.AddEntity(entity2, entity2Components);

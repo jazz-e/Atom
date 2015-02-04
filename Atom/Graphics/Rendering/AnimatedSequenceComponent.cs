@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Atom.Graphics.Rendering
 {
-    class AnimatedSequenceComponent
+   public class AnimatedSequenceComponent : Component
     {
         /// <summary>
         /// What is the current direction the animation is play in
