@@ -7,8 +7,6 @@ namespace Atom.Messaging
 {
     public interface IReceiver
     {
-        int Id { get; set; }
-
         /// <summary>
         /// Called when the PostOffice that receives a message that matches the filter
         /// </summary>
