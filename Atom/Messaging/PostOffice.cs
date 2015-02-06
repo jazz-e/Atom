@@ -9,8 +9,6 @@ namespace Atom.Messaging
 
         private HashSet<IReceiver> _receivers = new HashSet<IReceiver>();
 
-        private int _currentReceiverId = 0;
-
         private PostOffice()
         {
             
@@ -22,8 +20,6 @@ namespace Atom.Messaging
         /// <param name="receiver">The receiver to subscribe</param>
         public static void Subscribe(IReceiver receiver)
         {
-            receiver.Id = GetInstance().GetNextId();
-
             GetInstance()._receivers.Add(receiver);
         }
 
@@ -52,12 +48,5 @@ namespace Atom.Messaging
 
             return hasSent;
         }
-
-        private int GetNextId()
-        {
-            return ++_currentReceiverId;
-        }
-
-
     }
 }
