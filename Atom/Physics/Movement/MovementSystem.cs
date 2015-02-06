@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Atom.Messaging;
-using Atom.Rendering.Static;
 using Microsoft.Xna.Framework;
 
 namespace Atom.Physics.Movement

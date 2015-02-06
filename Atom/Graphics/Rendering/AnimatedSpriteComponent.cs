@@ -1,4 +1,4 @@
-﻿namespace Atom.Graphics
+﻿namespace Atom.Graphics.Rendering
 {
     public class AnimatedSpriteComponent : SpriteComponent 
     {
@@ -16,5 +16,10 @@
         /// How many frames in total are on the spritesheet
         /// </summary>
         public int FrameCount { get; set; }
+
+        /// <summary>
+        /// Where do you want to start the animation sequence
+        /// </summary>
+        public int SequenceStartFrame { get; set; }
     }
 }
