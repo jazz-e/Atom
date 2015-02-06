@@ -2,18 +2,25 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+
 using Atom.Graphics;
 using Atom.Physics;
+
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+
 
 namespace Atom.Graphics.Rendering.Animated
 {
     public class AnimatedRenderSystem : BaseSystem
     {
-        AnimatedSpriteComponent animatedSpriteComponent;
-        AnimatedSequenceComponent animatedSequenceComponent;
-        PositionComponent positionComponent;
-        Rectangle spriteRectangle, sourceRectangle;
+        AnimatedSpriteComponent _animatedSpriteComponent;
+        AnimatedSequenceComponent _animatedSequenceComponent;
+        PositionComponent _positionComponent;
+        Rectangle _spriteRectangle, _sourceRectangle;
+        
+        int currentSequenceIndex;
+        int time;
 
         public AnimatedRenderSystem()
         {
@@ -25,30 +32,28 @@ namespace Atom.Graphics.Rendering.Animated
 
         public void GetComponents(int entityId)
         {
-            positionComponent =
+            _positionComponent =
                 GetComponentsByEntityId<PositionComponent>(entityId).FirstOrDefault();
-            animatedSpriteComponent =
+            _animatedSpriteComponent =
                 GetComponentsByEntityId<AnimatedSpriteComponent>(entityId).FirstOrDefault();
-            animatedSequenceComponent =
+            _animatedSequenceComponent =
                 GetComponentsByEntityId<AnimatedSequenceComponent>(entityId).FirstOrDefault();
 
-            spriteRectangle =
-                new Rectangle((int)positionComponent.X, (int)positionComponent.Y,
-                    animatedSpriteComponent.FrameWidth, animatedSpriteComponent.FrameHeight);
+            _spriteRectangle =
+                new Rectangle((int)_positionComponent.X, (int)_positionComponent.Y,
+                    _animatedSpriteComponent.FrameWidth, _animatedSpriteComponent.FrameHeight);
         }
  
-        int time;
-
         public override void Update(GameTime gameTime, int entityId)
         {
             GetComponents(entityId);
-            if (animatedSpriteComponent == null || positionComponent == null) return;
+            if (_animatedSpriteComponent == null || _positionComponent == null) return;
 
-            float frameRate = (1f / animatedSpriteComponent.FramesPerSecond) / (float)gameTime.ElapsedGameTime.TotalSeconds;
+            float frameRate = (1f / _animatedSpriteComponent.FramesPerSecond) / (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             if (this.time > frameRate)
             { 
-                if(animatedSequenceComponent == null )
+                if(_animatedSequenceComponent == null )
                 LinearSequence(entityId);
                 else
                 CompositeSequence(entityId);
@@ -65,81 +70,80 @@ namespace Atom.Graphics.Rendering.Animated
         {
             //Dimension of the spriteSheet 
             int sheetWidth
-                = animatedSpriteComponent.Image.Width;
+                = _animatedSpriteComponent.Image.Width;
             int sheetHeight
-                = animatedSpriteComponent.Image.Height;
+                = _animatedSpriteComponent.Image.Height;
 
             //Frame Size 
             int frameWidth
-                = animatedSpriteComponent.FrameWidth;
+                = _animatedSpriteComponent.FrameWidth;
             int frameHeight
-                = animatedSpriteComponent.FrameHeight;
+                = _animatedSpriteComponent.FrameHeight;
 
             //Number of Sprite Elements 
             int numberOfSpritesX = sheetWidth / frameWidth;
             int numberOfSpritesY = sheetHeight / frameHeight;
 
             int sheetPositionX =
-                (animatedSpriteComponent.FrameIndex % numberOfSpritesX) * frameWidth;
+                (_animatedSpriteComponent.FrameIndex % numberOfSpritesX) * frameWidth;
             int sheetPositionY =
-                (animatedSpriteComponent.FrameIndex / numberOfSpritesX) * frameHeight;
+                (_animatedSpriteComponent.FrameIndex / numberOfSpritesX) * frameHeight;
 
-            animatedSpriteComponent.Location
+            _animatedSpriteComponent.Location
                 = new Point(sheetPositionX, sheetPositionY);
-            sourceRectangle = 
-                new Rectangle((int) animatedSpriteComponent.Location.X, (int) animatedSpriteComponent.Location.Y,
-                    animatedSpriteComponent.FrameWidth, animatedSpriteComponent.FrameHeight);
+            _sourceRectangle = 
+                new Rectangle((int) _animatedSpriteComponent.Location.X, (int) _animatedSpriteComponent.Location.Y,
+                    _animatedSpriteComponent.FrameWidth, _animatedSpriteComponent.FrameHeight);
 
         }
 
         public void LinearSequence(int entityId)
         {
-            if (animatedSpriteComponent == null) return;
+            if (_animatedSpriteComponent == null) return;
 
-            int endFrame = animatedSpriteComponent.FrameCount;
+            int endFrame = _animatedSpriteComponent.FrameCount;
 
-            if (animatedSpriteComponent.FrameIndex < endFrame)
-                animatedSpriteComponent.FrameIndex++;
+            if (_animatedSpriteComponent.FrameIndex < endFrame)
+                _animatedSpriteComponent.FrameIndex++;
             else
-                animatedSpriteComponent.FrameIndex = animatedSpriteComponent.SequenceStartFrame;
+                _animatedSpriteComponent.FrameIndex = _animatedSpriteComponent.SequenceStartFrame;
             
              SpriteLocation();
         }
-
-        int currentSequenceIndex;
+        
         public void CompositeSequence(int entityId)
         {
-            if (animatedSpriteComponent == null || animatedSequenceComponent == null) return;
+            if (_animatedSpriteComponent == null || _animatedSequenceComponent == null) return;
 
-            int endFrame = animatedSequenceComponent.AnimationSequence.Count() -1;
+            int endFrame = _animatedSequenceComponent.AnimationSequence.Count() -1;
             if (endFrame < 1) return;
 
             
-                animatedSpriteComponent.FrameIndex =
-                    animatedSequenceComponent.AnimationSequence[currentSequenceIndex];
-                if (animatedSequenceComponent.CurrentSequenceDirection == SequenceDirection.FORWARD)
+                _animatedSpriteComponent.FrameIndex =
+                    _animatedSequenceComponent.AnimationSequence[currentSequenceIndex];
+                if (_animatedSequenceComponent.CurrentSequenceDirection == SequenceDirection.FORWARD)
                 {
                     currentSequenceIndex++;
-                    if (currentSequenceIndex > endFrame - animatedSpriteComponent.SequenceStartFrame)
-                        currentSequenceIndex = animatedSpriteComponent.SequenceStartFrame;
+                    if (currentSequenceIndex > endFrame - _animatedSpriteComponent.SequenceStartFrame)
+                        currentSequenceIndex = _animatedSpriteComponent.SequenceStartFrame;
                 }
-                else if (animatedSequenceComponent.CurrentSequenceDirection == SequenceDirection.BACKWARD)
+                else if (_animatedSequenceComponent.CurrentSequenceDirection == SequenceDirection.BACKWARD)
                 {
                     currentSequenceIndex--;
-                    if (currentSequenceIndex < animatedSpriteComponent.SequenceStartFrame)
-                        currentSequenceIndex = animatedSpriteComponent.SequenceStartFrame + endFrame;
+                    if (currentSequenceIndex < _animatedSpriteComponent.SequenceStartFrame)
+                        currentSequenceIndex = _animatedSpriteComponent.SequenceStartFrame + endFrame;
                 }
         
 
             SpriteLocation();
         }
 
-        public override void Draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spriteBatch, int entityId)
+        public override void Draw(SpriteBatch spriteBatch, int entityId)
         {
             GetComponents(entityId);
-            if (animatedSpriteComponent == null || positionComponent == null) return;
+            if (_animatedSpriteComponent == null || _positionComponent == null) return;
 
-            spriteBatch.Draw(animatedSpriteComponent.Image, spriteRectangle, sourceRectangle, Color.White);
+            spriteBatch.Draw(_animatedSpriteComponent.Image, _spriteRectangle, _sourceRectangle, Color.White);
 
             base.Draw(spriteBatch, entityId);
         }
