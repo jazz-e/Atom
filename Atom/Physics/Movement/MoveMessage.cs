@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Atom.Messaging;
+using Microsoft.Xna.Framework;
 
 namespace Atom.Physics.Movement
 {
@@ -12,36 +10,18 @@ namespace Atom.Physics.Movement
 
         public MoveMessage()
         {
-            Data = new string[2];
+            Data = new string[3];
         }
 
-        public MoveMessage(int entityId, MoveDirection direction) : this()
+        public MoveMessage(int entityId, Vector2 force) : this()
         {
             SetEntityId(entityId);
-            SetMoveDirection(direction);
-        }
-
-        public MoveMessage SetMoveDirection(MoveDirection direction)
-        {
-            Data[0] = direction.ToString();
-
-            return this;
-        }
-
-        public MoveDirection GetMoveDirection()
-        {
-            MoveDirection moveDirection = MoveDirection.None;
-            if (Data[0] != null)
-            {
-                MoveDirection.TryParse(Data[0], out moveDirection);
-            }
-
-            return moveDirection;
+            SetForce(force);
         }
 
         public MoveMessage SetEntityId(int entityId)
         {
-            Data[1] = entityId.ToString();
+            Data[0] = entityId.ToString();
 
             return this;
         }
@@ -50,12 +30,25 @@ namespace Atom.Physics.Movement
         {
             int id = 0;
 
-            if (Data[1] != null)
+            if (Data[0] != null)
             {
-                id = Convert.ToInt32(Data[1]);
+                id = Convert.ToInt32(Data[0]);
             }
 
             return id;
+        }
+
+        public MoveMessage SetForce(Vector2 force)
+        {
+            Data[1] = Convert.ToString(force.X);
+            Data[2] = Convert.ToString(force.Y);
+
+            return this;
+        }
+
+        public Vector2 GetForce()
+        {
+            return new Vector2((float) Convert.ToDouble(Data[1]), (float) Convert.ToDouble(Data[2]));
         }
     }
 }

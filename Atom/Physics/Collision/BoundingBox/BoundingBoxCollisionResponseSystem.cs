@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Atom.Messaging;
+using Atom.Physics.Movement;
 using Microsoft.Xna.Framework;
 
 namespace Atom.Physics.Collision.BoundingBox
@@ -23,10 +24,10 @@ namespace Atom.Physics.Collision.BoundingBox
             {
                 CollisionMessage collisionMessage = (CollisionMessage)message;
 
-                VelocityComponent sourceEntityVelocityComponent =
+                VelocityComponent sourceVelocityComponent =
                     GetComponentsByEntityId<VelocityComponent>(collisionMessage.GetSourceCollidable()).FirstOrDefault();
 
-                VelocityComponent targetEntityVelocityComponent =
+                VelocityComponent targetVelocityComponent =
                     GetComponentsByEntityId<VelocityComponent>(collisionMessage.GetTargetCollidable()).FirstOrDefault();
 
                 PositionComponent sourceEntityPositionComponent =
@@ -80,17 +81,56 @@ namespace Atom.Physics.Collision.BoundingBox
                 else
                     MinimumTranslationDistance.Y = bottom;
 
+                float b = -0.5F;
+
+                
+
                 // 0 the axis with the largest mtd value.
                 if (Math.Abs(MinimumTranslationDistance.X) < Math.Abs(MinimumTranslationDistance.Y))
+                {
                     MinimumTranslationDistance.Y = 0;
+                    
+                    
+                }
                 else
+                {
                     MinimumTranslationDistance.X = 0;
+                    
+                }
 
-                sourceEntityPositionComponent.X += MinimumTranslationDistance.X;
-                sourceEntityPositionComponent.Y += MinimumTranslationDistance.Y;
+                
+                
+                
+                sourceEntityPositionComponent.Position += MinimumTranslationDistance;
+                
+
+
+                float k = 20F;
+               
+
+        
+
+                Vector2 x = Vector2.Subtract(sourceEntityPositionComponent.Position, targetEntityPositionComponent.Position);
+
+                x = Vector2.Negate(x);
+
+                Vector2 v = (sourceVelocityComponent.Velocity - targetVelocityComponent.Velocity);
+
+                Vector2 bv = b*v;
+
+                Vector2 kx = k*x;
+
+                Vector2 F1 = -kx - bv;
+
+                if ((float.IsNaN(F1.X) || float.IsNaN(F1.Y))) return;
+
+               MoveMessage move = new MoveMessage(sourceEntityPositionComponent.EntityId, F1);
+
+               PostOffice.SendMessage(move);
+
             }
         }
-
+        
         public TypeFilter GetMessageTypeFilter()
         {
             return new TypeFilter()

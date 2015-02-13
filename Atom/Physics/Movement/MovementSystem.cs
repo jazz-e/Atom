@@ -8,32 +8,43 @@ namespace Atom.Physics.Movement
 {
     public class MovementSystem : BaseSystem, IReceiver
     {
+        private VelocityComponent _velocityComponent;
+        private PositionComponent _positionComponent;
+        private MassComponent _massComponent;
+        private AccelerationComponent _accelerationComponent;
+
+
         public MovementSystem()
         {
             ComponentTypeFilter = new TypeFilter()
                 .AddFilter(typeof (PositionComponent))
                 .AddFilter(typeof (VelocityComponent))
-                .AddFilter(typeof (SpeedComponent));
+                .AddFilter(typeof (AccelerationComponent))
+                .AddFilter(typeof (MassComponent));
 
             PostOffice.Subscribe(this);
         }
 
         public override void Update(GameTime gameTime, int entityId)
         {
-            VelocityComponent velocityComponent =
-                    GetComponentsByEntityId<VelocityComponent>(entityId).FirstOrDefault();
+            GetComponents(entityId);
 
-            PositionComponent positionComponent =
-                    GetComponentsByEntityId<PositionComponent>(entityId).FirstOrDefault();
+            if (_velocityComponent == null || _positionComponent == null) return;
 
-            if (velocityComponent == null || positionComponent == null) return;
+            _accelerationComponent.PreviousAcceleration = _accelerationComponent.Acceleration;
+            _velocityComponent.PreviousVelocity = _velocityComponent.Velocity;
 
-            positionComponent.X += velocityComponent.Velocity.X * gameTime.ElapsedGameTime.Ticks;
-            positionComponent.Y += velocityComponent.Velocity.Y * gameTime.ElapsedGameTime.Ticks;
+            _positionComponent.Position +=
+                (_velocityComponent.Velocity * gameTime.ElapsedGameTime.Milliseconds
+                + (0.5F * _accelerationComponent.PreviousAcceleration * (gameTime.ElapsedGameTime.Milliseconds ^ 2))) / 1000;
 
-            velocityComponent.PreviousVelocity = velocityComponent.Velocity;
+            Vector2 newAcceleration = _massComponent.Force / _massComponent.Mass;
+            Vector2 averageAcceleration = ( _accelerationComponent.PreviousAcceleration + newAcceleration ) / 2;
+            _velocityComponent.Velocity += averageAcceleration * gameTime.ElapsedGameTime.Milliseconds;
 
-            velocityComponent.Velocity = Vector2.Zero;
+            _accelerationComponent.Acceleration = newAcceleration;
+
+            _massComponent.Force = Vector2.Zero;
         }
         
         public void OnMessage(IMessage message)
@@ -42,32 +53,25 @@ namespace Atom.Physics.Movement
             {
                 MoveMessage moveMessage = (MoveMessage) message;
 
-                MoveDirection direction = moveMessage.GetMoveDirection();
+                GetComponents(moveMessage.GetEntityId());
 
-                SpeedComponent speedComponent = 
-                    GetComponentsByEntityId<SpeedComponent>(moveMessage.GetEntityId()).FirstOrDefault();
-
-                VelocityComponent velocityComponent =
-                    GetComponentsByEntityId<VelocityComponent>(moveMessage.GetEntityId()).FirstOrDefault();
-
-                if (velocityComponent == null || speedComponent == null) return;
-
-                switch (direction)
-                {
-                    case MoveDirection.Up:
-                        velocityComponent.Velocity += new Vector2(0, -speedComponent.Speed);
-                        break;
-                    case MoveDirection.Down:
-                        velocityComponent.Velocity += new Vector2(0, speedComponent.Speed);
-                        break;
-                    case MoveDirection.Left:
-                        velocityComponent.Velocity += new Vector2(-speedComponent.Speed, 0);
-                        break;
-                    case MoveDirection.Right:
-                        velocityComponent.Velocity += new Vector2(speedComponent.Speed, 0);
-                        break;
-                }
+                _massComponent.Force += moveMessage.GetForce();
             }
+        }
+
+        public void GetComponents(int entityId)
+        {
+            _velocityComponent =
+                GetComponentsByEntityId<VelocityComponent>(entityId).FirstOrDefault();
+
+            _positionComponent =
+                GetComponentsByEntityId<PositionComponent>(entityId).FirstOrDefault();
+
+            _massComponent =
+                GetComponentsByEntityId<MassComponent>(entityId).FirstOrDefault();
+
+            _accelerationComponent =
+                GetComponentsByEntityId<AccelerationComponent>(entityId).FirstOrDefault();
         }
 
         public TypeFilter GetMessageTypeFilter()

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Atom;
 using Atom.Entity;
-using Atom.Graphics;
 using Atom.Input;
 using Atom.Physics;
 using Atom.Physics.Collision.BoundingBox;
@@ -17,7 +16,8 @@ namespace AtomDemo
             {
                 new PositionComponent() { EntityId = Id, X = 300f, Y = 300f},
                 new VelocityComponent() { EntityId = Id },
-                new SpeedComponent() { EntityId = Id, Speed = 0.0001F },
+                new AccelerationComponent() { EntityId = Id },
+                new MassComponent() { EntityId = Id, Mass = 1 },
 
                 new StandardKeyComponent() { 
                     EntityId = Id, 

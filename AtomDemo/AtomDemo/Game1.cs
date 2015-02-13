@@ -9,6 +9,7 @@ using Atom.Logging.Loggers;
 using Atom.Physics;
 using Atom.Physics.Collision;
 using Atom.Physics.Collision.BoundingBox;
+using Atom.Physics.Gravity;
 using Atom.Physics.Movement;
 using Atom.Graphics.Rendering;
 using Atom.Graphics.Rendering.Static;
@@ -101,8 +102,17 @@ namespace AtomDemo
                 AnimationSequence = new int[] {0, 1, 2, 3, 4, 5, 6, 7 }, CurrentSequenceDirection = SequenceDirection.NONE,
             };
 
-            components.Add(aniSprite);
-            components.Add(aniSequence);
+            GravityComponent gravity = new GravityComponent
+            {
+                EntityId = entity.Id,
+                Gravity = 5F
+            };
+
+            components.Add(spriteComponent);
+            components.Add(gravity);
+
+            //components.Add(aniSprite);
+            //components.Add(aniSequence);
 
             ILogger logger = LogFactory.GetInstance().Construct("Console");
 
@@ -149,6 +159,7 @@ namespace AtomDemo
                 });
 
             world.AddSystem(new StandardKeyboardSystem());
+            world.AddSystem(new GravitySystem());
             world.AddSystem(new MovementSystem());
             world.AddSystem(new BoundingBoxSystem());
             world.AddSystem(new BoundingBoxCollisionResponseSystem());
@@ -157,8 +168,8 @@ namespace AtomDemo
             world.AddSystem(new AnimatedRenderSystem());
             
             world.AddEntity(entity, components);
-            //world.AddEntity(entity1, entity1Components);
-            //world.AddEntity(entity2, entity2Components);
+            world.AddEntity(entity1, entity1Components);
+            world.AddEntity(entity2, entity2Components);
             //world.AddEntity(entity3, entity3Components);
 
             base.Initialize();

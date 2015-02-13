@@ -27,19 +27,22 @@ namespace Atom.Input
 
                 StandardInputActions actions = keyComponent.Action;
 
+                const float upForce = 11F;
+                const float sideForce = 3F;
+
                 switch (actions)
                 {
                     case StandardInputActions.Up:
-                        PostOffice.SendMessage(new MoveMessage(entityId, MoveDirection.Up));
+                        PostOffice.SendMessage(new MoveMessage(entityId, new Vector2(0, -upForce)));
                         break;
                     case StandardInputActions.Down:
-                        PostOffice.SendMessage(new MoveMessage(entityId, MoveDirection.Down));
+                        PostOffice.SendMessage(new MoveMessage(entityId, new Vector2(0, upForce)));
                         break;
                     case StandardInputActions.Left:
-                        PostOffice.SendMessage(new MoveMessage(entityId, MoveDirection.Left));
+                        PostOffice.SendMessage(new MoveMessage(entityId, new Vector2(-sideForce, 0)));
                         break;
                     case StandardInputActions.Right:
-                        PostOffice.SendMessage(new MoveMessage(entityId, MoveDirection.Right));
+                        PostOffice.SendMessage(new MoveMessage(entityId, new Vector2(sideForce, 0)));
                         break;
                     case StandardInputActions.Fire:
                         break;

@@ -39,6 +39,8 @@ namespace Atom.Graphics.Rendering.Animated
             _animatedSequenceComponent =
                 GetComponentsByEntityId<AnimatedSequenceComponent>(entityId).FirstOrDefault();
 
+            if (_positionComponent == null || _animatedSpriteComponent == null) return;
+
             _spriteRectangle =
                 new Rectangle((int)_positionComponent.X, (int)_positionComponent.Y,
                     _animatedSpriteComponent.FrameWidth, _animatedSpriteComponent.FrameHeight);
