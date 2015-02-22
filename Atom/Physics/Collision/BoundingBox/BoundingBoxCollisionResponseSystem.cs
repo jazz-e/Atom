@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Atom.Messaging;
+using Atom.Physics.Gravity;
 using Atom.Physics.Movement;
 using Microsoft.Xna.Framework;
 
@@ -11,9 +12,11 @@ namespace Atom.Physics.Collision.BoundingBox
         public BoundingBoxCollisionResponseSystem()
         {
             ComponentTypeFilter = new TypeFilter()
-                .AddFilter(typeof(VelocityComponent))
-                .AddFilter(typeof(PositionComponent))
-                .AddFilter(typeof(BoundingBoxComponent));
+                .AddFilter(typeof (VelocityComponent))
+                .AddFilter(typeof (PositionComponent))
+                .AddFilter(typeof (BoundingBoxComponent))
+                .AddFilter(typeof (MassComponent))
+                .AddFilter(typeof (GravityComponent));
 
             PostOffice.Subscribe(this);
         }
@@ -81,52 +84,28 @@ namespace Atom.Physics.Collision.BoundingBox
                 else
                     MinimumTranslationDistance.Y = bottom;
 
-                float b = -0.5F;
-
-                
-
                 // 0 the axis with the largest mtd value.
                 if (Math.Abs(MinimumTranslationDistance.X) < Math.Abs(MinimumTranslationDistance.Y))
                 {
                     MinimumTranslationDistance.Y = 0;
-                    
-                    
                 }
                 else
                 {
                     MinimumTranslationDistance.X = 0;
-                    
                 }
-
-                
-                
-                
                 sourceEntityPositionComponent.Position += MinimumTranslationDistance;
-                
 
+                MassComponent sourceMassComponent =
+                    GetComponentsByEntityId<MassComponent>(sourceVelocityComponent.EntityId).First();
 
-                float k = 20F;
-               
+                GravityComponent sourceGravityComponent =
+                    GetComponentsByEntityId<GravityComponent>(sourceVelocityComponent.EntityId).First();
 
-        
+                Vector2 newForce = -sourceMassComponent.Force - (new Vector2(0, sourceGravityComponent.Gravity));
 
-                Vector2 x = Vector2.Subtract(sourceEntityPositionComponent.Position, targetEntityPositionComponent.Position);
+                MoveMessage move = new MoveMessage(sourceEntityPositionComponent.EntityId, newForce);
 
-                x = Vector2.Negate(x);
-
-                Vector2 v = (sourceVelocityComponent.Velocity - targetVelocityComponent.Velocity);
-
-                Vector2 bv = b*v;
-
-                Vector2 kx = k*x;
-
-                Vector2 F1 = -kx - bv;
-
-                if ((float.IsNaN(F1.X) || float.IsNaN(F1.Y))) return;
-
-               MoveMessage move = new MoveMessage(sourceEntityPositionComponent.EntityId, F1);
-
-               PostOffice.SendMessage(move);
+                PostOffice.SendMessage(move);
 
             }
         }
