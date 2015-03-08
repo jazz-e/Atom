@@ -14,9 +14,22 @@ namespace Atom.Entity
         /// Creates all the components needed for the entity and returns them in a list
         /// </summary>
         /// <returns>List of all the components that the entity uses</returns>
-        public virtual List<Component> CreateDefaultComponents()
+        protected virtual List<Component> CreateDefaultComponents()
         {
             return new List<Component>();
+        }
+
+        /// <summary>
+        /// Gets all the deafult components for this type of entity
+        /// </summary>
+        /// <returns></returns>
+        public virtual List<Component> GetDefaultComponents()
+        {
+            List<Component> components = CreateDefaultComponents();
+
+            components.ForEach(component => component.EntityId = Id);
+
+            return components;
         }
 
         /// <summary>

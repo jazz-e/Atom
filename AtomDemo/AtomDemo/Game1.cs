@@ -1,13 +1,7 @@
 using System.Collections.Generic;
-using System.Linq;
 using Atom;
 using Atom.Entity;
-using Atom.Graphics;
 using Atom.Input;
-using Atom.Logging;
-using Atom.Logging.Loggers;
-using Atom.Physics;
-using Atom.Physics.Collision;
 using Atom.Physics.Collision.BoundingBox;
 using Atom.Physics.Gravity;
 using Atom.Physics.Movement;
@@ -48,46 +42,16 @@ namespace AtomDemo
         /// </summary>
         protected override void Initialize()
         {
-            // TODO: Add your initialization logic here
+            GameServices.Initialize(Content, graphics);
 
             world = new World();
 
-            EntityFactory entityFactory = EntityFactory.GetInstance();
-
             EntityFactory.GetInstance().Register<PlayerEntity>();
+            EntityFactory.GetInstance().Register<Platform>();
 
+            entity = EntityFactory.GetInstance().Construct<PlayerEntity>();
+            Platform platform = EntityFactory.GetInstance().Construct<Platform>();
             
-            entity = entityFactory.Construct<PlayerEntity>();
-            PlayerEntity entity1 = entityFactory.Construct<PlayerEntity>();
-
-            PlayerEntity entity2 = entityFactory.Construct<PlayerEntity>();
-            PlayerEntity entity3 = entityFactory.Construct<PlayerEntity>();
-
-
-            List<Component> components = entity.CreateDefaultComponents();
-            SpriteComponent spriteComponent = new SpriteComponent()
-            {
-                EntityId = entity.Id,
-                Image = this.Content.Load<Texture2D>("space_invader"),
-                FrameWidth = 100,
-                FrameHeight = 100,
-            };
-
-            SpriteComponent spriteComponent1 = new SpriteComponent()
-            {
-                EntityId = entity1.Id,
-                Image = this.Content.Load<Texture2D>("space_invader"),
-                FrameWidth = 100,
-                FrameHeight = 100,
-            };
-
-            SpriteComponent spriteComponent2 = new SpriteComponent()
-            {
-                EntityId = entity2.Id,
-                Image = this.Content.Load<Texture2D>("space_invader"),
-                FrameWidth = 100,
-                FrameHeight = 100,
-            };
 
             AnimatedSpriteComponent aniSprite = new AnimatedSpriteComponent()
             {
@@ -102,62 +66,6 @@ namespace AtomDemo
                 AnimationSequence = new int[] {0, 1, 2, 3, 4, 5, 6, 7 }, CurrentSequenceDirection = SequenceDirection.NONE,
             };
 
-            GravityComponent gravity = new GravityComponent
-            {
-                EntityId = entity.Id,
-                Gravity = 5F
-            };
-
-            components.Add(spriteComponent);
-            components.Add(gravity);
-
-            //components.Add(aniSprite);
-            //components.Add(aniSequence);
-
-            ILogger logger = LogFactory.GetInstance().Construct("Console");
-
-            logger.Log(LogLevel.Info, components.ToString());
-            logger.Log(LogLevel.Warning, "Warning Message");
-            logger.Log(LogLevel.Error, "Error message");
-            
-            List<Component> entity1Components = entity1.CreateDefaultComponents();
-            List<Component> entity2Components = entity2.CreateDefaultComponents();
-            List<Component> entity3Components = entity3.CreateDefaultComponents();
-
-            entity1Components.Add(spriteComponent1);
-            entity2Components.Add(spriteComponent2);
-
-            entity3Components.Add(aniSprite);
-            entity3Components.Add(aniSequence);
-
-            entity1Components.RemoveAll(component => component.GetType() == typeof (StandardKeyComponent));
-            entity2Components.RemoveAll(component => component.GetType() == typeof(StandardKeyComponent));
-
-            entity2Components.Where(component => component.GetType() == typeof(PositionComponent)).ToList().ForEach(
-                (Component component) =>
-                {
-                    if (component.GetType() == typeof (PositionComponent))
-                    {
-                        var position = (PositionComponent) component;
-
-                        position.X += 100;
-                        position.Y -= 100;
-                    }
-                    
-                });
-
-            components.Where(component => component.GetType() == typeof(PositionComponent)).ToList().ForEach(
-                (Component component) =>
-                {
-                    if (component.GetType() == typeof(PositionComponent))
-                    {
-                        var position = (PositionComponent)component;
-
-                        position.Y -= 300;
-                    }
-
-                });
-
             world.AddSystem(new StandardKeyboardSystem());
             world.AddSystem(new GravitySystem());
             world.AddSystem(new MovementSystem());
@@ -167,10 +75,8 @@ namespace AtomDemo
             world.AddSystem(new StaticRenderSystem());
             world.AddSystem(new AnimatedRenderSystem());
             
-            world.AddEntity(entity, components);
-            world.AddEntity(entity1, entity1Components);
-            world.AddEntity(entity2, entity2Components);
-            //world.AddEntity(entity3, entity3Components);
+            world.AddEntity(entity, entity.GetDefaultComponents());
+            world.AddEntity(platform, platform.GetDefaultComponents());
 
             base.Initialize();
         }
