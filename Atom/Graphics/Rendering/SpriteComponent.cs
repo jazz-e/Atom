@@ -23,7 +23,7 @@ namespace Atom.Graphics.Rendering
         /// <summary>
         /// The scale at which to draw the frame at
         /// </summary>
-        public int Scale { get; set; }
+        public float Scale { get; set; }
 
         /// <summary>
         /// The top right location on the spritesheet to take the frame from
