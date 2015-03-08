@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.Net.Mime;
 using Atom;
 using Atom.Entity;
+using Atom.Graphics.Rendering;
 using Atom.Input;
 using Atom.Physics;
 using Atom.Physics.Collision.BoundingBox;
+using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 
 namespace AtomDemo
@@ -61,8 +64,15 @@ namespace AtomDemo
                     Width = 100,
                     Height = 100,
                     EntityId = Id
-                }
+                },
 
+                new SpriteComponent()
+                {
+                    EntityId = Id,
+                    Image = Content.Load<Texture2D>("space_invader"),
+                    FrameWidth = 100,
+                    FrameHeight = 100,
+                }
             };
 
             return components;

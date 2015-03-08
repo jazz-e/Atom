@@ -14,11 +14,5 @@ namespace Atom
         /// Flag to set whether the system should use the component
         /// </summary>
         public bool Disabled { get; set; }
-
-        public ContentManager Content
-        {
-            get { return GameServices.GetService<ContentManager>(); }
-        }
-
     }
 }

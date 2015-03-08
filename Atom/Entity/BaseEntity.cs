@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Microsoft.Xna.Framework.Content;
 
 namespace Atom.Entity
 {
@@ -16,6 +17,14 @@ namespace Atom.Entity
         public virtual List<Component> CreateDefaultComponents()
         {
             return new List<Component>();
+        }
+
+        /// <summary>
+        /// Returns a instance of ContentManger from GameServices
+        /// </summary>
+        protected ContentManager Content
+        {
+            get { return GameServices.GetService<ContentManager>(); }
         }
     }
 }
