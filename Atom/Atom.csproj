@@ -65,6 +65,7 @@
     <Compile Include="Exceptions\IdAlreadyExists.cs" />
     <Compile Include="Exceptions\NotEntityException.cs" />
     <Compile Include="Exceptions\NotILoggerException.cs" />
+    <Compile Include="GameServices.cs" />
     <Compile Include="Graphics\Rendering\AnimatedSequenceComponent.cs" />
     <Compile Include="Graphics\Rendering\AnimatedSpriteComponent.cs" />
     <Compile Include="Component.cs" />
