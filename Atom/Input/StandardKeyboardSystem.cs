@@ -27,7 +27,7 @@ namespace Atom.Input
 
                 StandardInputActions actions = keyComponent.Action;
 
-                const float upForce = 11F;
+                const float upForce = 20F;
                 const float sideForce = 3F;
 
                 switch (actions)
