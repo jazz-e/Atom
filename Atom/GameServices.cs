@@ -37,7 +37,7 @@ namespace Atom
         /// </summary>
         /// <param name="content"></param>
         /// <param name="graphics"></param>
-        public static void Initialize(ContentManager content, GraphicsDevice graphics)
+        public static void Initialize(ContentManager content, GraphicsDeviceManager graphics)
         {
             _container = new GameServiceContainer();
             AddService(content);
