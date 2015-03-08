@@ -53,19 +53,6 @@ namespace AtomDemo
             Platform platform = EntityFactory.GetInstance().Construct<Platform>();
             
 
-            AnimatedSpriteComponent aniSprite = new AnimatedSpriteComponent()
-            {
-                EntityId  = entity.Id,
-                Image = this.Content.Load<Texture2D>("runningcat"),
-                FrameWidth = 512, FrameHeight = 256, FrameCount = 7, FramesPerSecond = 16, SequenceStartFrame = 0,
-            };
-
-            AnimatedSequenceComponent aniSequence = new AnimatedSequenceComponent()
-            {
-                EntityId = entity.Id,
-                AnimationSequence = new int[] {0, 1, 2, 3, 4, 5, 6, 7 }, CurrentSequenceDirection = SequenceDirection.NONE,
-            };
-
             world.AddSystem(new StandardKeyboardSystem());
             world.AddSystem(new GravitySystem());
             world.AddSystem(new MovementSystem());

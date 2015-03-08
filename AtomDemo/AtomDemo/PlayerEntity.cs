@@ -18,7 +18,7 @@ namespace AtomDemo
         {
             List<Component> components = new List<Component>
             {
-                new PositionComponent() { X = 300f, Y = 300f},
+                new PositionComponent() { X = 100f, Y = 0f},
                 new VelocityComponent(),
                 new AccelerationComponent(),
                 new MassComponent() { Mass = 1 },
@@ -56,15 +56,24 @@ namespace AtomDemo
                 new BoundingBoxComponent()
                 {
                     Active = true,
-                    Width = 100,
-                    Height = 100,
+                    Width = 512,
+                    Height = 256,
                 },
 
-                new SpriteComponent()
+                new AnimatedSpriteComponent()
                 {
-                    Image = Content.Load<Texture2D>("space_invader"),
-                    FrameWidth = 100,
-                    FrameHeight = 100,
+                    Image = Content.Load<Texture2D>("runningcat"),
+                    FrameWidth = 512, 
+                    FrameHeight = 256, 
+                    FrameCount = 7, 
+                    FramesPerSecond = 16, 
+                    SequenceStartFrame = 0
+                },
+
+                new AnimatedSequenceComponent()
+                {
+                    AnimationSequence = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 },
+                    CurrentSequenceDirection = SequenceDirection.FORWARD,
                 },
 
                 new GravityComponent()
