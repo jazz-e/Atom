@@ -123,13 +123,13 @@ namespace Atom.Graphics.Rendering.Animated
             
                 _animatedSpriteComponent.FrameIndex =
                     _animatedSequenceComponent.AnimationSequence[currentSequenceIndex];
-                if (_animatedSequenceComponent.CurrentSequenceDirection == SequenceDirection.FORWARD)
+                if (_animatedSequenceComponent.CurrentSequenceDirection == SequenceDirection.Forward)
                 {
                     currentSequenceIndex++;
                     if (currentSequenceIndex > endFrame - _animatedSpriteComponent.SequenceStartFrame)
                         currentSequenceIndex = _animatedSpriteComponent.SequenceStartFrame;
                 }
-                else if (_animatedSequenceComponent.CurrentSequenceDirection == SequenceDirection.BACKWARD)
+                else if (_animatedSequenceComponent.CurrentSequenceDirection == SequenceDirection.Backward)
                 {
                     currentSequenceIndex--;
                     if (currentSequenceIndex < _animatedSpriteComponent.SequenceStartFrame)

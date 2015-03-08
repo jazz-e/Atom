@@ -5,8 +5,8 @@
     /// </summary>
     public enum SequenceDirection
     {
-        NONE = 0,
-        FORWARD,
-        BACKWARD
+        None = 0,
+        Forward,
+        Backward
     }
 }

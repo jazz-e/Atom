@@ -11,7 +11,7 @@ namespace Atom.Graphics.Rendering
         /// What is the current direction the animation is play in
         /// </summary>
         public SequenceDirection CurrentSequenceDirection 
-            = SequenceDirection.NONE;
+            = SequenceDirection.None;
 
         /// <summary>
         /// What are the current frames you want to use

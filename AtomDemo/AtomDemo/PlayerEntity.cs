@@ -73,7 +73,7 @@ namespace AtomDemo
                 new AnimatedSequenceComponent()
                 {
                     AnimationSequence = new int[] { 0, 1, 2, 3, 4, 5, 6, 7 },
-                    CurrentSequenceDirection = SequenceDirection.FORWARD,
+                    CurrentSequenceDirection = SequenceDirection.Backward,
                 },
 
                 new GravityComponent()
