@@ -37,7 +37,7 @@ namespace Atom.Entity
         /// </summary>
         protected ContentManager Content
         {
-            get { return GameServices.GetService<ContentManager>(); }
+            get { return GameServices.Content; }
         }
     }
 }
