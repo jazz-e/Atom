@@ -38,7 +38,7 @@ namespace Atom.Graphics.Rendering.Static
             if (positionComponent == null || spriteComponent == null) return;
 
             spriteRectangle =
-                new Rectangle((int)positionComponent.X, (int)positionComponent.Y,
+                new Rectangle(spriteComponent.Location.X, spriteComponent.Location.Y,
                     spriteComponent.FrameWidth, spriteComponent.FrameHeight);
         }
 
@@ -47,7 +47,8 @@ namespace Atom.Graphics.Rendering.Static
             GetComponents(entityId);
             if (spriteComponent == null || positionComponent == null) return;
 
-            spriteBatch.Draw(spriteComponent.Image, spriteRectangle, Color.White);
+            spriteBatch.Draw(spriteComponent.Image, positionComponent.Position, spriteRectangle, Color.White, 0,
+                Vector2.Zero, spriteComponent.Scale, SpriteEffects.None, 0);
         }
     }
 }
