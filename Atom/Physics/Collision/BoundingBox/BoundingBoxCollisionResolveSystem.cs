@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Security.AccessControl;
+using Atom.Entity;
+using Atom.World;
 using Atom.Messaging;
 using Atom.Physics.Gravity;
-using Atom.Physics.Movement;
 using Microsoft.Xna.Framework;
 
 namespace Atom.Physics.Collision.BoundingBox
@@ -20,7 +20,8 @@ namespace Atom.Physics.Collision.BoundingBox
                 .AddFilter(typeof (BoundingBoxComponent))
                 .AddFilter(typeof (MassComponent))
                 .AddFilter(typeof (GravityComponent))
-                .AddFilter(typeof (AccelerationComponent));
+                .AddFilter(typeof (AccelerationComponent))
+                .AddFilter(typeof (CollisionExclusionComponent));
 
             PostOffice.Subscribe(this);
         }
@@ -30,6 +31,19 @@ namespace Atom.Physics.Collision.BoundingBox
             if (message.GetType() == typeof(CollisionMessage))
             {
                 CollisionMessage collisionMessage = (CollisionMessage)message;
+
+                BaseEntity entity = Atom.World.World.GetInstance().GetEntity(collisionMessage.GetTargetCollidable());
+
+                CollisionExclusionComponent exclusionComponent =
+                    GetComponentsByEntityId<CollisionExclusionComponent>(collisionMessage.GetSourceCollidable()).FirstOrDefault();
+
+                if (exclusionComponent != null)
+                {
+                    if (exclusionComponent.Exclusions.Contains(entity.GetType()))
+                    {
+                        return;
+                    }
+                }
 
                 VelocityComponent sourceVelocityComponent =
                     GetComponentsByEntityId<VelocityComponent>(collisionMessage.GetSourceCollidable()).FirstOrDefault();

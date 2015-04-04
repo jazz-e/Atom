@@ -29,5 +29,26 @@ namespace Atom.Graphics.Rendering
         /// The top right location on the spritesheet to take the frame from
         /// </summary>
         public Point Location { get; set; }
+
+        private float _layerDepth = 0;
+        public float LayerDepth
+        {
+            get { return _layerDepth; }
+            set { _layerDepth = value; }
+        }
+
+        private float _rotation = 0;
+        public float Rotation
+        {
+            get { return _rotation; }
+            set { _rotation = value; }
+        }
+
+        private Color _tint = Color.White;
+        public Color Tint
+        {
+            get { return _tint; }
+            set { _tint = value; }
+        }
     }
 }

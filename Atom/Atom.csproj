@@ -86,6 +86,7 @@
     <Compile Include="Physics\Collision\BoundingBox\BoundingBoxSystem.cs" />
     <Compile Include="Physics\Collision\BoundingBox\CollisionFace.cs" />
     <Compile Include="Physics\Collision\CollisionComponent.cs" />
+    <Compile Include="Physics\Collision\CollisionExclusionComponent.cs" />
     <Compile Include="Physics\Collision\CollisionMessage.cs" />
     <Compile Include="Physics\Collision\CollisionResponseMessage.cs" />
     <Compile Include="Physics\Gravity\GravityComponent.cs" />

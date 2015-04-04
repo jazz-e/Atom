@@ -46,8 +46,8 @@ namespace Atom.Graphics.Rendering.Static
             GetComponents(entityId);
             if (spriteComponent == null || positionComponent == null) return;
 
-            spriteBatch.Draw(spriteComponent.Image, positionComponent.Position, spriteRectangle, Color.White, 0,
-                Vector2.Zero, spriteComponent.Scale, SpriteEffects.None, 0);
+            spriteBatch.Draw(spriteComponent.Image, positionComponent.Position, spriteRectangle, spriteComponent.Tint, spriteComponent.Rotation,
+                Vector2.Zero, spriteComponent.Scale, SpriteEffects.None, spriteComponent.LayerDepth);
         }
     }
 }
