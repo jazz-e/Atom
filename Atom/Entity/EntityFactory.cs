@@ -11,6 +11,8 @@ namespace Atom.Entity
 
         private Dictionary<string, Type> _entityTypes = new Dictionary<string, Type>();
 
+        private List<BaseEntity> _entities = new List<BaseEntity>(); 
+
         private int _currentEntityId = 0;
 
         private EntityFactory() {}

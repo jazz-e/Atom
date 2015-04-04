@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Atom.Entity;
 using Microsoft.Xna.Framework;
@@ -12,11 +13,13 @@ namespace Atom.World
         private List<BaseSystem> _systems = new List<BaseSystem>();
         private HashSet<BaseEntity> _entities = new HashSet<BaseEntity>();
 
+        private static World _instance;
+
         public bool Paused { get; set; }
 
         public World()
         {
-
+            _instance = this;
         }
 
         public virtual void Update(GameTime gameTime)
@@ -90,6 +93,11 @@ namespace Atom.World
         public BaseEntity GetEntity(int id)
         {
             return _entities.First(entity => entity.Id == id);
+        }
+
+        public static World GetInstance()
+        {
+            return _instance;
         }
     }
 }

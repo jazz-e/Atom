@@ -44,10 +44,6 @@ namespace Atom.Input
                     case StandardInputActions.Right:
                         PostOffice.SendMessage(new MoveMessage(entityId, new Vector2(sideForce, 0)));
                         break;
-                    case StandardInputActions.Fire:
-                        break;
-                    case StandardInputActions.AltFire:
-                        break;
                 }
             }
         }

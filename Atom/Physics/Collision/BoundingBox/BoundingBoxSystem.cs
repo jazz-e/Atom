@@ -49,7 +49,7 @@ namespace Atom.Physics.Collision.BoundingBox
 
                 if (boundingBox.Intersects(otherBoundingBox))
                 {
-                    PostOffice.SendMessage(new CollisionMessage(entityId, otherBoundingBoxComponent.EntityId));
+                    PostOffice.SendMessage(new CollisionMessage(entityId, otherBoundingBoxComponent.EntityId, (float) gameTime.ElapsedGameTime.TotalSeconds));
                 }
             }
         }

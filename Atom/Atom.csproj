@@ -81,11 +81,13 @@
     <Compile Include="Messaging\IReceiver.cs" />
     <Compile Include="Messaging\PostOffice.cs" />
     <Compile Include="Physics\AccelerationComponent.cs" />
-    <Compile Include="Physics\Collision\BoundingBox\BoundingBoxCollisionResponseSystem.cs" />
+    <Compile Include="Physics\Collision\BoundingBox\BoundingBoxCollisionResolveSystem.cs" />
     <Compile Include="Physics\Collision\BoundingBox\BoundingBoxComponent.cs" />
     <Compile Include="Physics\Collision\BoundingBox\BoundingBoxSystem.cs" />
+    <Compile Include="Physics\Collision\BoundingBox\CollisionFace.cs" />
     <Compile Include="Physics\Collision\CollisionComponent.cs" />
     <Compile Include="Physics\Collision\CollisionMessage.cs" />
+    <Compile Include="Physics\Collision\CollisionResponseMessage.cs" />
     <Compile Include="Physics\Gravity\GravityComponent.cs" />
     <Compile Include="Physics\Gravity\GravitySystem.cs" />
     <Compile Include="Physics\MassComponent.cs" />

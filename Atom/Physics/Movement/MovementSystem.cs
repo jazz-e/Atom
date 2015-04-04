@@ -29,18 +29,18 @@ namespace Atom.Physics.Movement
         {
             GetComponents(entityId);
 
-            if (_velocityComponent == null || _positionComponent == null) return;
+            if (_velocityComponent == null || _positionComponent == null || _accelerationComponent == null || _massComponent == null) return;
 
             _accelerationComponent.PreviousAcceleration = _accelerationComponent.Acceleration;
             _velocityComponent.PreviousVelocity = _velocityComponent.Velocity;
 
             _positionComponent.Position +=
-                (_velocityComponent.Velocity * gameTime.ElapsedGameTime.Milliseconds
-                + (0.5F * _accelerationComponent.PreviousAcceleration * (gameTime.ElapsedGameTime.Milliseconds ^ 2))) / 1000;
+                (_velocityComponent.Velocity * (float)gameTime.ElapsedGameTime.TotalSeconds
+                + (0.5F * _accelerationComponent.Acceleration * ((int)gameTime.ElapsedGameTime.TotalSeconds ^ 2)));
 
             Vector2 newAcceleration = _massComponent.Force / _massComponent.Mass;
             Vector2 averageAcceleration = ( _accelerationComponent.PreviousAcceleration + newAcceleration ) / 2;
-            _velocityComponent.Velocity += averageAcceleration * gameTime.ElapsedGameTime.Milliseconds;
+            _velocityComponent.Velocity += averageAcceleration * (float)gameTime.ElapsedGameTime.TotalSeconds;
 
             _accelerationComponent.Acceleration = newAcceleration;
 

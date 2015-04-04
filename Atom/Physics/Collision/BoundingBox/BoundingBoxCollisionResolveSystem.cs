@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Security.AccessControl;
 using Atom.Messaging;
 using Atom.Physics.Gravity;
 using Atom.Physics.Movement;
@@ -7,16 +10,17 @@ using Microsoft.Xna.Framework;
 
 namespace Atom.Physics.Collision.BoundingBox
 {
-    public class BoundingBoxCollisionResponseSystem : BaseSystem, IReceiver
+    public class BoundingBoxCollisionResolveSystem : BaseSystem, IReceiver
     {
-        public BoundingBoxCollisionResponseSystem()
+        public BoundingBoxCollisionResolveSystem()
         {
             ComponentTypeFilter = new TypeFilter()
                 .AddFilter(typeof (VelocityComponent))
                 .AddFilter(typeof (PositionComponent))
                 .AddFilter(typeof (BoundingBoxComponent))
                 .AddFilter(typeof (MassComponent))
-                .AddFilter(typeof (GravityComponent));
+                .AddFilter(typeof (GravityComponent))
+                .AddFilter(typeof (AccelerationComponent));
 
             PostOffice.Subscribe(this);
         }
@@ -84,29 +88,40 @@ namespace Atom.Physics.Collision.BoundingBox
                 else
                     MinimumTranslationDistance.Y = bottom;
 
+                CollisionFace collisionFace;
+
                 // 0 the axis with the largest mtd value.
-                if (Math.Abs(MinimumTranslationDistance.X) < Math.Abs(MinimumTranslationDistance.Y))
+                if (Math.Abs(MinimumTranslationDistance.X) <= Math.Abs(MinimumTranslationDistance.Y))
                 {
                     MinimumTranslationDistance.Y = 0;
+
+                    collisionFace = CollisionFace.Left;
+
+                    if (MinimumTranslationDistance.X > 0)
+                    {
+                        collisionFace = CollisionFace.Right;
+                    }
                 }
                 else
                 {
                     MinimumTranslationDistance.X = 0;
+
+                    collisionFace = CollisionFace.Bottom;
+
+                    if (MinimumTranslationDistance.Y > 0)
+                    {
+                        collisionFace = CollisionFace.Top;
+                    }
                 }
+
+                CollisionFace targetFace;
+
+                Enum.TryParse((-Convert.ToInt32(collisionFace)).ToString(CultureInfo.InvariantCulture), out targetFace);
+
                 sourceEntityPositionComponent.Position += MinimumTranslationDistance;
 
-                MassComponent sourceMassComponent =
-                    GetComponentsByEntityId<MassComponent>(sourceVelocityComponent.EntityId).First();
-
-                GravityComponent sourceGravityComponent =
-                    GetComponentsByEntityId<GravityComponent>(sourceVelocityComponent.EntityId).First();
-
-                Vector2 newForce = -sourceMassComponent.Force - (new Vector2(0, sourceGravityComponent.Gravity));
-
-                MoveMessage move = new MoveMessage(sourceEntityPositionComponent.EntityId, newForce);
-
-                PostOffice.SendMessage(move);
-
+                PostOffice.SendMessage(new CollisionResponseMessage(sourceVelocityComponent.EntityId, collisionFace));
+                PostOffice.SendMessage(new CollisionResponseMessage(targetEntityPositionComponent.EntityId, targetFace));
             }
         }
         
