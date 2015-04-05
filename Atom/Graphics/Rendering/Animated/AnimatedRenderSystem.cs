@@ -145,9 +145,7 @@ namespace Atom.Graphics.Rendering.Animated
             GetComponents(entityId);
             if (_animatedSpriteComponent == null || _positionComponent == null) return;
 
-            spriteBatch.Draw(_animatedSpriteComponent.Image, _spriteRectangle, _sourceRectangle, Color.White);
-
-            base.Draw(spriteBatch, entityId);
+            spriteBatch.Draw(_animatedSpriteComponent.Image, _spriteRectangle, _sourceRectangle, _animatedSpriteComponent.Tint, _animatedSpriteComponent.Rotation, Vector2.Zero, SpriteEffects.None, _animatedSpriteComponent.LayerDepth);
         }
     }
 }

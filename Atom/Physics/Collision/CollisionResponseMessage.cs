@@ -9,11 +9,12 @@ namespace Atom.Physics.Collision
     {
         public string[] Data { get; set; }
 
-        public CollisionResponseMessage(int entityId, CollisionFace face)
+        public CollisionResponseMessage(int entityId, int targetEntityId, CollisionFace face)
         {
-            Data = new string[2];
+            Data = new string[3];
             SetEntityId(entityId);
             SetCollisionFace(face);
+            SetTargetEntityId(targetEntityId);
         }
 
         public void SetEntityId(int entityId)
@@ -26,6 +27,11 @@ namespace Atom.Physics.Collision
             Data[1] = face.ToString();
         }
 
+        public void SetTargetEntityId(int target)
+        {
+            Data[2] = target.ToString(CultureInfo.InvariantCulture);
+        }
+
         public int GetEntityId()
         {
             return Convert.ToInt32(Data[0]);
@@ -36,6 +42,11 @@ namespace Atom.Physics.Collision
             CollisionFace face;
             Enum.TryParse(Data[1], out face);
             return face;
+        }
+
+        public int GetTargetEntityId()
+        {
+            return Convert.ToInt32(Data[2]);
         }
     }
 }

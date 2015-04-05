@@ -55,6 +55,8 @@ namespace Atom.Physics.Movement
 
                 GetComponents(moveMessage.GetEntityId());
 
+                if (_massComponent == null) return;
+
                 _massComponent.Force += moveMessage.GetForce();
             }
         }

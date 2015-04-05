@@ -39,7 +39,7 @@ namespace Atom
         /// <returns></returns>
         public bool Contains(Type type)
         {
-            return _filters.FindAll(filterType => filterType.FullName == type.FullName).Count > 0;
+            return _filters.Count(filterType => filterType == type) > 0;
         }
 
         /// <summary>
@@ -71,6 +71,13 @@ namespace Atom
         public List<T> FilterList<T>(IEnumerable<T> objects)
         {
             List<T> filteredList = objects.Where(obj => Contains(obj.GetType())).ToList();
+
+            return filteredList;
+        }
+
+        public List<T> ExcludeList<T>(IEnumerable<T> objects)
+        {
+            List<T> filteredList = objects.Where(obj => !Contains(obj.GetType())).ToList();
 
             return filteredList;
         }

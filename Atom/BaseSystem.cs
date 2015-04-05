@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
@@ -7,7 +9,7 @@ namespace Atom
 {
     public abstract class BaseSystem
     {
-        protected List<Component> _components = new List<Component>();
+        protected Dictionary<int, List<Component>> _components = new Dictionary<int, List<Component>>();
 
         protected TypeFilter ComponentTypeFilter;
 
@@ -16,14 +18,16 @@ namespace Atom
         /// </summary>
         /// <param name="gameTime"></param>
         /// <param name="entityId">The id of the entity to be updated</param>
-        public virtual void Update(GameTime gameTime, int entityId) {}
+        public virtual void Update(GameTime gameTime, int entityId)
+        {
+        }
 
         /// <summary>
         /// Runs the update draw logic of the system
         /// </summary>
         /// <param name="spriteBatch"></param>
         /// <param name="entityId">The id of the entity to be drawn</param>
-        public virtual void Draw(SpriteBatch spriteBatch, int entityId) {}
+        public virtual void Draw(SpriteBatch spriteBatch, int entityId) { }
 
         /// <summary>
         /// Removes the component from the system
@@ -32,7 +36,11 @@ namespace Atom
         /// <param name="entityId">The id of the entity</param>
         public virtual void Purge<T>(int entityId)
         {
-            _components.RemoveAll(component => component.EntityId == entityId && component.GetType() == typeof(T));
+            if (_components.ContainsKey(entityId) == false) return;
+
+            List<Component> components = _components[entityId];
+
+            components.RemoveAll(component => component is T);
         }
 
         /// <summary>
@@ -42,8 +50,12 @@ namespace Atom
         /// <param name="entityId">The id of the entity</param>
         public virtual void Disable<T>(int entityId)
         {
-            _components
-                   .Where(component => component.EntityId == entityId && !component.Disabled)
+            if (_components.ContainsKey(entityId) == false) return;
+
+            List<Component> components = _components[entityId];
+
+            components
+                   .Where(component => !component.Disabled)
                    .ToList()
                    .ForEach(component => component.Disabled = true);
         }
@@ -55,8 +67,11 @@ namespace Atom
         /// <param name="entityId">The id of the entity</param>
         public virtual void Enable<T>(int entityId)
         {
-            _components
-                    .Where(component => component.EntityId == entityId && component.Disabled)
+            if (_components.ContainsKey(entityId) == false) return;
+
+            List<Component> components = _components[entityId];
+            components
+                    .Where(component => component.Disabled)
                     .ToList()
                     .ForEach(component => component.Disabled = false);
         }
@@ -67,7 +82,8 @@ namespace Atom
         /// <param name="entityId">The id of the entity</param>
         public virtual void RemoveEntityComponents(int entityId)
         {
-            _components.RemoveAll(component => component.EntityId == entityId);
+            if (_components.ContainsKey(entityId) == false) return;
+            _components.Remove(entityId);
         }
 
         /// <summary>
@@ -81,7 +97,14 @@ namespace Atom
 
             List<Component> filterEntityComponents = ComponentTypeFilter.FilterList(entityComponents);
 
-            _components.AddRange(filterEntityComponents);
+            if (_components.ContainsKey(entityId))
+            {
+                _components[entityId].AddRange(components);
+            }
+            else
+            {
+                _components.Add(entityId, filterEntityComponents);
+            }
         }
 
         /// <summary>
@@ -92,14 +115,31 @@ namespace Atom
         /// <returns></returns>
         protected List<T> GetComponentsByEntityId<T>(int entityId) where T : class
         {
+            if (!_components.ContainsKey(entityId)) return new List<T>();
+
+            List<Component> components = _components[entityId];
+
+            components = components.FindAll(component => component.Disabled == false && component.GetType() == typeof(T));
+
+            return components.Cast<T>().ToList();
+        }
+
+        protected List<T> GetAllComponentsOfType<T>()
+        {
+            List<Component> components = new List<Component>();
+            _components.Values.ToList().ForEach(components.AddRange);
+
+            return components.Where(component => component is T).Cast<T>().ToList();
+
+        }
+
+        protected List<T> GetAllComponentOfTypeExcept<T>(int entityId) where T : class
+        {
             List<T> components = new List<T>();
 
-            foreach (Component component in _components)
+            foreach (KeyValuePair<int, List<Component>> keyValuePair in _components.Where(keyValuePair => keyValuePair.Key != entityId))
             {
-                if (component.GetType() == typeof (T) && !component.Disabled && component.EntityId == entityId)
-                {
-                    components.Add(component as T);
-                }
+                components.AddRange(GetComponentsByEntityId<T>(keyValuePair.Key));
             }
 
             return components;

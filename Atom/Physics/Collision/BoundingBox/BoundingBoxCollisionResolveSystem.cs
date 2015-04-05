@@ -12,6 +12,8 @@ namespace Atom.Physics.Collision.BoundingBox
 {
     public class BoundingBoxCollisionResolveSystem : BaseSystem, IReceiver
     {
+        protected new Dictionary<int, List<Component>> _components = new Dictionary<int, List<Component>>();
+
         public BoundingBoxCollisionResolveSystem()
         {
             ComponentTypeFilter = new TypeFilter()
@@ -32,24 +34,8 @@ namespace Atom.Physics.Collision.BoundingBox
             {
                 CollisionMessage collisionMessage = (CollisionMessage)message;
 
-                BaseEntity entity = Atom.World.World.GetInstance().GetEntity(collisionMessage.GetTargetCollidable());
-
-                CollisionExclusionComponent exclusionComponent =
-                    GetComponentsByEntityId<CollisionExclusionComponent>(collisionMessage.GetSourceCollidable()).FirstOrDefault();
-
-                if (exclusionComponent != null)
-                {
-                    if (exclusionComponent.Exclusions.Contains(entity.GetType()))
-                    {
-                        return;
-                    }
-                }
-
                 VelocityComponent sourceVelocityComponent =
                     GetComponentsByEntityId<VelocityComponent>(collisionMessage.GetSourceCollidable()).FirstOrDefault();
-
-                VelocityComponent targetVelocityComponent =
-                    GetComponentsByEntityId<VelocityComponent>(collisionMessage.GetTargetCollidable()).FirstOrDefault();
 
                 PositionComponent sourceEntityPositionComponent =
                    GetComponentsByEntityId<PositionComponent>(collisionMessage.GetSourceCollidable()).FirstOrDefault();
@@ -62,6 +48,10 @@ namespace Atom.Physics.Collision.BoundingBox
 
                 BoundingBoxComponent targetEntityBoundingBoxComponent =
                     GetComponentsByEntityId<BoundingBoxComponent>(collisionMessage.GetTargetCollidable()).FirstOrDefault();
+
+                if (sourceEntityBoundingBoxComponent == null || sourceEntityPositionComponent == null ||
+                    sourceVelocityComponent == null || targetEntityPositionComponent == null ||
+                    targetEntityBoundingBoxComponent == null) return;
 
                 Rectangle sourceRectangle = new Rectangle(
                     (int)sourceEntityPositionComponent.X,
@@ -88,8 +78,8 @@ namespace Atom.Physics.Collision.BoundingBox
                 float top = (targetMinimum.Y - sourceMaximum.Y);
                 float bottom = (targetMaximum.Y - sourceMinimum.Y);
 
-                if (left > 0 || right < 0) throw new Exception("no intersection");
-                if (top > 0 || bottom < 0) throw new Exception("no intersection");
+                if (left > 0 || right < 0) return;
+                if (top > 0 || bottom < 0) return;
 
                 // box intersect. work out the mtd on both x and y axes.
                 if (Math.Abs(left) < right)
@@ -132,10 +122,19 @@ namespace Atom.Physics.Collision.BoundingBox
 
                 Enum.TryParse((-Convert.ToInt32(collisionFace)).ToString(CultureInfo.InvariantCulture), out targetFace);
 
-                sourceEntityPositionComponent.Position += MinimumTranslationDistance;
+                if (sourceEntityBoundingBoxComponent.ShouldMoveY)
+                {
+                    targetEntityPositionComponent.Y -= MinimumTranslationDistance.Y;
+                }
+                else
+                {
+                    sourceEntityPositionComponent.Y += MinimumTranslationDistance.Y;
+                }
 
-                PostOffice.SendMessage(new CollisionResponseMessage(sourceVelocityComponent.EntityId, collisionFace));
-                PostOffice.SendMessage(new CollisionResponseMessage(targetEntityPositionComponent.EntityId, targetFace));
+                sourceEntityPositionComponent.X += MinimumTranslationDistance.X;
+
+                PostOffice.SendMessage(new CollisionResponseMessage(sourceVelocityComponent.EntityId, targetEntityPositionComponent.EntityId, collisionFace));
+                PostOffice.SendMessage(new CollisionResponseMessage(targetEntityPositionComponent.EntityId, sourceVelocityComponent.EntityId, targetFace));
             }
         }
         

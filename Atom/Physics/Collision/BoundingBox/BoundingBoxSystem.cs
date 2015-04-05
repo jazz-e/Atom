@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using Atom.Entity;
 using Atom.Messaging;
 using Microsoft.Xna.Framework;
 
@@ -13,7 +12,8 @@ namespace Atom.Physics.Collision.BoundingBox
         {
             ComponentTypeFilter = new TypeFilter()
                 .AddFilter(typeof (BoundingBoxComponent))
-                .AddFilter(typeof (PositionComponent));
+                .AddFilter(typeof (PositionComponent))
+                .AddFilter(typeof (CollisionExclusionComponent));
         }
 
         public override void Update(GameTime gameTime, int entityId)
@@ -24,15 +24,31 @@ namespace Atom.Physics.Collision.BoundingBox
             PositionComponent positionComponent =
                 GetComponentsByEntityId<PositionComponent>(entityId).FirstOrDefault();
 
-            if (boundingBoxComponent == null || !boundingBoxComponent.Active || positionComponent == null) return;
+            if (boundingBoxComponent == null || !boundingBoxComponent.Active || positionComponent == null) 
+                return;
 
-            List<BoundingBoxComponent> otherBoundingBoxComponents = _components.FindAll(
-                component => component.EntityId != entityId 
-                    && component.GetType() == typeof (BoundingBoxComponent))
-                    .Cast<BoundingBoxComponent>()
-                    .ToList();
+            BaseEntity entity = Atom.World.World.GetInstance().GetEntity(entityId);
 
-            Rectangle boundingBox = new Rectangle((int) positionComponent.X, (int) positionComponent.Y,
+            CollisionExclusionComponent exclusionComponent =
+                GetComponentsByEntityId<CollisionExclusionComponent>(entityId).FirstOrDefault();
+
+
+
+            List<BoundingBoxComponent> otherBoundingBoxComponents =
+                GetAllComponentOfTypeExcept<BoundingBoxComponent>(entityId);
+
+            if (exclusionComponent != null)
+            {
+                List<int> entityIds = otherBoundingBoxComponents.ToDictionary(component => component.EntityId).Keys.ToList();
+                List<BaseEntity> entities = new List<BaseEntity>();
+                entityIds.ForEach(index => entities.Add(World.World.GetInstance().GetEntity(index)));
+                entities = exclusionComponent.Exclusions.ExcludeList(entities);
+                List<BoundingBoxComponent> newOtherBoundingBoxComponents = new List<BoundingBoxComponent>();
+                entities.ForEach(ent => newOtherBoundingBoxComponents.AddRange(GetComponentsByEntityId<BoundingBoxComponent>(ent.Id)));
+                otherBoundingBoxComponents = newOtherBoundingBoxComponents;
+            }
+
+            Rectangle boundingBox = new Rectangle((int) positionComponent.X + boundingBoxComponent.RelativeX, (int) positionComponent.Y + boundingBoxComponent.RelativeY,
                 boundingBoxComponent.Width, boundingBoxComponent.Height);
 
 
@@ -43,7 +59,7 @@ namespace Atom.Physics.Collision.BoundingBox
 
                 if (otherPositionComponent == null) continue;
 
-                Rectangle otherBoundingBox = new Rectangle((int) otherPositionComponent.X, (int) otherPositionComponent.Y,
+                Rectangle otherBoundingBox = new Rectangle((int) otherPositionComponent.X + otherBoundingBoxComponent.RelativeX, (int) otherPositionComponent.Y + otherBoundingBoxComponent.RelativeY,
                     otherBoundingBoxComponent.Width, otherBoundingBoxComponent.Height);
 
 

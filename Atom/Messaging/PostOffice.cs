@@ -48,5 +48,10 @@ namespace Atom.Messaging
 
             return hasSent;
         }
+
+        public static void NewInstance()
+        {
+            _instance = new PostOffice();
+        }
     }
 }
