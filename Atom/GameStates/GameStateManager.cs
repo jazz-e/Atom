@@ -49,7 +49,7 @@ namespace Atom.GameStates
         {
             foreach (var gameState in _gameStates.Values)
             {
-                gameState.Initialize();
+                gameState.Initialise();
             }
         }
 

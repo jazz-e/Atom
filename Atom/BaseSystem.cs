@@ -144,5 +144,13 @@ namespace Atom
 
             return components;
         }
+
+        public void RemoveEntityComponent(int entityId, Component removeComponent)
+        {
+            if (_components.ContainsKey(entityId) == false) return;
+            List<Component> components = _components[entityId];
+
+            components.RemoveAll(component => component == removeComponent);
+        }
     }
 }

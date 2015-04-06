@@ -33,7 +33,7 @@ namespace Atom
         }
 
         /// <summary>
-        /// Initialize the container and add the basic service that you might want everywhere.
+        /// Initialise the container and add the basic service that you might want everywhere.
         /// </summary>
         /// <param name="content"></param>
         /// <param name="graphics"></param>

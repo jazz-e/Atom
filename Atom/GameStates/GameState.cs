@@ -8,7 +8,7 @@ namespace Atom.GameStates
     {
         public string Name { get; set; }
 
-        public virtual void Initialize(){}
+        public virtual void Initialise(){}
 
         public virtual void LoadContent(ContentManager contentManager){}
 

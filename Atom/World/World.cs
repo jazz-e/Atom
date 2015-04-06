@@ -17,6 +17,8 @@ namespace Atom.World
         private List<int> _removeEntities = new List<int>(); 
         private static World _instance;
 
+        public bool IsPendingChanges { get; set; }
+
         public bool Paused { get; set; }
 
         public World()
@@ -38,6 +40,7 @@ namespace Atom.World
 
                 _newEntities = new List<BaseEntity>();
                 _newComponents = new List<List<Component>>();
+                IsPendingChanges = false;
             }
 
             if (_removeEntities.Any())
@@ -113,6 +116,7 @@ namespace Atom.World
 
             _newEntities.Add(entity);
             _newComponents.Add(components);
+            IsPendingChanges = true;
 
             return entity;
         }
@@ -160,6 +164,11 @@ namespace Atom.World
             _entities.Clear();
             _systems.Clear();
             _instance = null;
+        }
+
+        public void RemoveEntityComponent(int entityId, Component component)
+        {
+            _systems.ForEach(system => system.RemoveEntityComponent(entityId, component));
         }
     }
 }
